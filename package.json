@@ -1,10 +1,11 @@
 {
   "name": "scavenger",
   "version": "0.0.1",
-  "description": "Web scraping and screenshots",  
+  "description": "Web scraping and screenshots",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": { "node" : ">= 4.6.1" } },
   "keywords": [
     "scraping"
   ],
