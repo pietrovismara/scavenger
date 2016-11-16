@@ -7,7 +7,12 @@
   },
   "engines": { "node" : ">= 4.6.1" },
   "keywords": [
-    "scraping"
+    "scraping",
+    "screenshots",
+    "scraper",
+    "html",
+    "dynamic",
+    "static"
   ],
   "author": "Pietro Vismara",
   "license": "ISC",
@@ -37,5 +42,9 @@
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.0",
     "gulp-inject-string": "^1.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url" : "https://github.com/pietrovismara/scavenger.git"
   }
 }
