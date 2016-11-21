@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 "use strict";
 
 var _promise = require('babel-runtime/core-js/promise');

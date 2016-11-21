@@ -153,7 +153,9 @@ var getHTML = function () {
                         _context4.prev = 0;
                         _context4.next = 3;
                         return nightmare.evaluate(function () {
-                            return document.documentElement.innerHTML;
+                            var node = document.doctype;
+                            var doctype = "<!DOCTYPE " + node.name + (node.publicId ? ' PUBLIC "' + node.publicId + '"' : '') + (!node.publicId && node.systemId ? ' SYSTEM' : '') + (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
+                            return doctype + '\n' + document.documentElement.innerHTML;
                         });
 
                     case 3:
