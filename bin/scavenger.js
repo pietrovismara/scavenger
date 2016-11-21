@@ -85,14 +85,14 @@ var load = function () {
 
 var scrape = function () {
     var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(options) {
-        var html, _parseOptions2, minify;
+        var html, _parseOptions2, minify, evaluate;
 
         return _regenerator2.default.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
                     case 0:
                         debug('scrape');
-                        html = void 0, _parseOptions2 = parseOptions(options), minify = _parseOptions2.minify;
+                        html = void 0, _parseOptions2 = parseOptions(options), minify = _parseOptions2.minify, evaluate = _parseOptions2.evaluate;
                         _context2.prev = 2;
                         _context2.next = 5;
                         return webdriver.isLoaded();
@@ -108,7 +108,7 @@ var scrape = function () {
 
                     case 8:
                         _context2.next = 10;
-                        return webdriver.getHTML();
+                        return webdriver.getHTML(evaluate);
 
                     case 10:
                         html = _context2.sent;
@@ -155,14 +155,14 @@ var scrape = function () {
 
 var screenshot = function () {
     var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(options) {
-        var buffer, _parseOptions3, width, crop, format;
+        var buffer, _parseOptions3, width, crop, format, evaluate;
 
         return _regenerator2.default.wrap(function _callee3$(_context3) {
             while (1) {
                 switch (_context3.prev = _context3.next) {
                     case 0:
                         debug('screenshot');
-                        buffer = void 0, _parseOptions3 = parseOptions(options), width = _parseOptions3.width, crop = _parseOptions3.crop, format = _parseOptions3.format;
+                        buffer = void 0, _parseOptions3 = parseOptions(options), width = _parseOptions3.width, crop = _parseOptions3.crop, format = _parseOptions3.format, evaluate = _parseOptions3.evaluate;
                         _context3.prev = 2;
                         _context3.next = 5;
                         return webdriver.isLoaded();
@@ -178,7 +178,7 @@ var screenshot = function () {
 
                     case 8:
                         _context3.next = 10;
-                        return webdriver.getScreenshot(width);
+                        return webdriver.getScreenshot(width, evaluate);
 
                     case 10:
                         buffer = _context3.sent;

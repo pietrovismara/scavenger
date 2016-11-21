@@ -101,7 +101,7 @@ var waitForElement = function () {
 }();
 
 var getScreenshot = function () {
-    var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(width) {
+    var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(width, evaluate) {
         var dimensions;
         return _regenerator2.default.wrap(function _callee3$(_context3) {
             while (1) {
@@ -109,82 +109,103 @@ var getScreenshot = function () {
                     case 0:
                         debug('getScreenshot');
                         _context3.prev = 1;
-                        _context3.next = 4;
+
+                        if (!evaluate) {
+                            _context3.next = 5;
+                            break;
+                        }
+
+                        _context3.next = 5;
+                        return nightmare.evaluate(evalFn(evaluate));
+
+                    case 5:
+                        _context3.next = 7;
                         return nightmare.evaluate(getPageDimensions);
 
-                    case 4:
+                    case 7:
                         dimensions = _context3.sent;
 
                         width = width ? Number(width) : dimensions.width;
-                        _context3.next = 8;
+                        _context3.next = 11;
                         return nightmare.viewport(width, dimensions.height).wait(1000);
 
-                    case 8:
-                        _context3.next = 10;
+                    case 11:
+                        _context3.next = 13;
                         return nightmare.evaluate(hideScrollbar);
 
-                    case 10:
-                        _context3.next = 12;
+                    case 13:
+                        _context3.next = 15;
                         return nightmare.screenshot();
 
-                    case 12:
+                    case 15:
                         return _context3.abrupt('return', _context3.sent);
 
-                    case 15:
-                        _context3.prev = 15;
+                    case 18:
+                        _context3.prev = 18;
                         _context3.t0 = _context3['catch'](1);
 
                         end();
                         debug(_context3.t0);
                         return _context3.abrupt('return', false);
 
-                    case 20:
+                    case 23:
                     case 'end':
                         return _context3.stop();
                 }
             }
-        }, _callee3, this, [[1, 15]]);
+        }, _callee3, this, [[1, 18]]);
     }));
 
-    return function getScreenshot(_x2) {
+    return function getScreenshot(_x2, _x3) {
         return _ref3.apply(this, arguments);
     };
 }();
 
 var getHTML = function () {
-    var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
+    var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(evaluate) {
         return _regenerator2.default.wrap(function _callee4$(_context4) {
             while (1) {
                 switch (_context4.prev = _context4.next) {
                     case 0:
-                        _context4.prev = 0;
-                        _context4.next = 3;
+                        debug('getHTML');
+                        _context4.prev = 1;
+
+                        if (!evaluate) {
+                            _context4.next = 5;
+                            break;
+                        }
+
+                        _context4.next = 5;
+                        return nightmare.evaluate(evalFn(evaluate));
+
+                    case 5:
+                        _context4.next = 7;
                         return nightmare.evaluate(function () {
                             var node = document.doctype;
                             var doctype = "<!DOCTYPE " + node.name + (node.publicId ? ' PUBLIC "' + node.publicId + '"' : '') + (!node.publicId && node.systemId ? ' SYSTEM' : '') + (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
                             return doctype + '\n' + document.documentElement.innerHTML;
                         });
 
-                    case 3:
+                    case 7:
                         return _context4.abrupt('return', _context4.sent);
 
-                    case 6:
-                        _context4.prev = 6;
-                        _context4.t0 = _context4['catch'](0);
+                    case 10:
+                        _context4.prev = 10;
+                        _context4.t0 = _context4['catch'](1);
 
                         end();
                         debug(_context4.t0);
                         return _context4.abrupt('return', _context4.t0);
 
-                    case 11:
+                    case 15:
                     case 'end':
                         return _context4.stop();
                 }
             }
-        }, _callee4, this, [[0, 6]]);
+        }, _callee4, this, [[1, 10]]);
     }));
 
-    return function getHTML() {
+    return function getHTML(_x4) {
         return _ref4.apply(this, arguments);
     };
 }();
@@ -290,4 +311,8 @@ function getPageDimensions() {
         height: body.scrollHeight,
         width: body.scrollWidth
     };
+}
+
+function evalFn(fnString) {
+    return eval('(' + fnString + ')');
 }

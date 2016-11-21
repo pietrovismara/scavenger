@@ -23,117 +23,123 @@ var exec = function () {
                         args = void 0, html = void 0, buffers = void 0;
                         name = argv.name || util.cleanFilename(argv.url);
                         _context.prev = 2;
+
+                        // If string is a path to js file, load it
+                        if (argv.evaluate && path.parse(argv.evaluate).ext === '.js') {
+                            argv.evaluate = fs.readFileSync(argv.evaluate).toString('utf-8');
+                        }
+
                         _context.t0 = argv._[0];
-                        _context.next = _context.t0 === 'scrape' ? 6 : _context.t0 === 'screenshot' ? 18 : _context.t0 === 'ss' ? 31 : 44;
+                        _context.next = _context.t0 === 'scrape' ? 7 : _context.t0 === 'screenshot' ? 19 : _context.t0 === 'ss' ? 32 : 45;
                         break;
 
-                    case 6:
-                        args = _.pick(argv, ['url', 'name', 'minify', 'selector']);
+                    case 7:
+                        args = _.pick(argv, ['url', 'name', 'minify', 'selector', 'evaluate']);
                         debug('scrape', args);
-                        _context.next = 10;
+                        _context.next = 11;
                         return scavenger.scrape(args);
 
-                    case 10:
+                    case 11:
                         html = _context.sent;
 
                         if (!process.stdout.isTTY) {
-                            _context.next = 16;
+                            _context.next = 17;
                             break;
                         }
 
-                        _context.next = 14;
+                        _context.next = 15;
                         return writeFile(name + '.html', html);
 
-                    case 14:
-                        _context.next = 17;
+                    case 15:
+                        _context.next = 18;
                         break;
 
-                    case 16:
+                    case 17:
                         process.stdout.write(html);
 
-                    case 17:
-                        return _context.abrupt('break', 44);
-
                     case 18:
-                        args = _.pick(argv, ['url', 'name', 'width', 'crop', 'format', 'selector']);
+                        return _context.abrupt('break', 45);
+
+                    case 19:
+                        args = _.pick(argv, ['url', 'name', 'width', 'crop', 'format', 'selector', 'evaluate']);
                         debug('screenshot', args);
-                        _context.next = 22;
+                        _context.next = 23;
                         return scavenger.screenshot(args);
 
-                    case 22:
+                    case 23:
                         buffers = _context.sent;
 
                         debug(buffers);
 
                         if (!process.stdout.isTTY) {
-                            _context.next = 29;
+                            _context.next = 30;
                             break;
                         }
 
-                        _context.next = 27;
+                        _context.next = 28;
                         return writeBuffers(name, buffers, args.format);
 
-                    case 27:
-                        _context.next = 30;
+                    case 28:
+                        _context.next = 31;
                         break;
-
-                    case 29:
-                        process.stdout.write(buffers.full);
 
                     case 30:
-                        return _context.abrupt('break', 44);
+                        process.stdout.write(buffers.full);
 
                     case 31:
-                        args = _.pick(argv, ['url', 'minify', 'name', 'width', 'crop', 'format', 'selector']);
+                        return _context.abrupt('break', 45);
+
+                    case 32:
+                        args = _.pick(argv, ['url', 'minify', 'name', 'width', 'crop', 'format', 'selector', 'evaluate']);
                         debug('ss', args);
-                        _context.next = 35;
+                        _context.next = 36;
                         return scavenger.scrape(args);
 
-                    case 35:
+                    case 36:
                         html = _context.sent;
-                        _context.next = 38;
+                        _context.next = 39;
                         return scavenger.screenshot(args);
 
-                    case 38:
+                    case 39:
                         buffers = _context.sent;
-                        _context.next = 41;
+                        _context.next = 42;
                         return writeFile(name + '.html', html);
 
-                    case 41:
-                        _context.next = 43;
+                    case 42:
+                        _context.next = 44;
                         return writeBuffers(name, buffers, args.format);
 
-                    case 43:
-                        return _context.abrupt('break', 44);
-
                     case 44:
-                        _context.next = 46;
+                        return _context.abrupt('break', 45);
+
+                    case 45:
+                        _context.next = 47;
                         return scavenger.end();
 
-                    case 46:
+                    case 47:
                         _context.t1 = _context.sent;
                         debug(_context.t1);
-                        _context.next = 53;
+                        _context.next = 54;
                         break;
 
-                    case 50:
-                        _context.prev = 50;
+                    case 51:
+                        _context.prev = 51;
                         _context.t2 = _context['catch'](2);
 
                         if (_context.t2.message) {
                             process.stdout.write('Error: ' + _context.t2.message + '\n');
                         }
 
-                    case 53:
+                    case 54:
 
                         process.exit();
 
-                    case 54:
+                    case 55:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[2, 50]]);
+        }, _callee, this, [[2, 51]]);
     }));
 
     return function exec(_x) {
@@ -144,6 +150,7 @@ var exec = function () {
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var fs = require('fs');
+var path = require('path');
 var _ = require('lodash');
 var debug = require('debug')('scavenger:index');
 var scavenger = require('./scavenger');
@@ -153,17 +160,14 @@ var commandOptions = {
     u: {
         demand: 'Url is required',
         describe: 'Url to scrape',
-        string: 'url',
         alias: 'url'
     },
     n: {
         describe: 'Screenshot filename',
-        string: 'n',
         alias: 'name'
     },
     c: {
         describe: 'Cropping formats in pixels, eg: <width>X<height>',
-        string: 'c',
         alias: 'crop',
         array: true
     },
@@ -174,25 +178,26 @@ var commandOptions = {
     },
     f: {
         describe: 'Screenshot format, png or jpeg',
-        string: 'f',
         alias: 'format'
     },
     s: {
         describe: 'HTML selector. Scraper will wait for the respective element to render. Has priority on the selectorChildren option.',
-        string: 's',
         alias: 'selector'
     },
     w: {
         describe: 'Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.',
-        string: 'w',
         alias: 'width'
+    },
+    e: {
+        describe: 'A Javascript function to evaluate in the page context. Can be a path to a file or a string.',
+        alias: 'evaluate'
     }
 };
 
 if (module.parent) {
     module.exports = scavenger;
 } else {
-    var argv = require('yargs').usage('Usage: scavenger <command> [options]').example('scavenger screenshot -u https://www.google.it -n test.jpg -c 1200X680 980X560').demand(['scrape', 'screenshot', 'ss']).command('scrape', 'Scrape HTML from the passed url', _.pick(commandOptions, ['u', 'm', 's'])).command('screenshot', 'Take a screenshot of the passed url', _.omit(commandOptions, ['m'])).command('ss', 'Scrape and Screenshot', commandOptions).help().argv;
+    var argv = require('yargs').usage('Usage: scavenger <command> [options]').example('scavenger screenshot -u https://www.google.it -n test.jpg -c 1200X680 980X560').demand(['scrape', 'screenshot', 'ss']).command('scrape', 'Scrape HTML from the passed url', _.pick(commandOptions, ['u', 'm', 's', 'e', 'ep'])).command('screenshot', 'Take a screenshot of the passed url', _.omit(commandOptions, ['m'])).command('ss', 'Scrape and Screenshot', commandOptions).help().argv;
 
     exec(argv);
 }
