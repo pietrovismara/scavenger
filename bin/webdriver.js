@@ -101,45 +101,52 @@ var waitForElement = function () {
 }();
 
 var getScreenshot = function () {
-    var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3() {
+    var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(width) {
         var dimensions;
         return _regenerator2.default.wrap(function _callee3$(_context3) {
             while (1) {
                 switch (_context3.prev = _context3.next) {
                     case 0:
-                        _context3.prev = 0;
-                        _context3.next = 3;
-                        return nightmare.evaluate(hideScrollbar);
-
-                    case 3:
-                        _context3.next = 5;
+                        debug('getScreenshot');
+                        _context3.prev = 1;
+                        _context3.next = 4;
                         return nightmare.evaluate(getPageDimensions);
 
-                    case 5:
+                    case 4:
                         dimensions = _context3.sent;
+
+                        width = width ? Number(width) : dimensions.width;
                         _context3.next = 8;
-                        return nightmare.viewport(dimensions.width, dimensions.height).wait(1000).screenshot();
+                        return nightmare.viewport(width, dimensions.height).wait(1000);
 
                     case 8:
+                        _context3.next = 10;
+                        return nightmare.evaluate(hideScrollbar);
+
+                    case 10:
+                        _context3.next = 12;
+                        return nightmare.screenshot();
+
+                    case 12:
                         return _context3.abrupt('return', _context3.sent);
 
-                    case 11:
-                        _context3.prev = 11;
-                        _context3.t0 = _context3['catch'](0);
+                    case 15:
+                        _context3.prev = 15;
+                        _context3.t0 = _context3['catch'](1);
 
                         end();
                         debug(_context3.t0);
                         return _context3.abrupt('return', false);
 
-                    case 16:
+                    case 20:
                     case 'end':
                         return _context3.stop();
                 }
             }
-        }, _callee3, this, [[0, 11]]);
+        }, _callee3, this, [[1, 15]]);
     }));
 
-    return function getScreenshot() {
+    return function getScreenshot(_x2) {
         return _ref3.apply(this, arguments);
     };
 }();
@@ -255,14 +262,26 @@ function load(url, waitMs, debugMode) {
     });
 }
 
-function hideScrollbar() {
-    var sheet = function () {
-        var style = document.createElement("style");
-        style.appendChild(document.createTextNode(""));
-        document.head.appendChild(style);
-        return style.sheet;
-    }();
-    sheet.insertRule('.element::-webkit-scrollbar { width: 0 !important }', 0);
+function hideScrollbar(done) {
+    if (document.readyState === "complete") {
+        run();
+        done();
+    } else {
+        document.addEventListener("DOMContentLoaded", function (event) {
+            run();
+            done();
+        });
+    }
+
+    function run() {
+        var sheet = function () {
+            var style = document.createElement("style");
+            style.appendChild(document.createTextNode(""));
+            document.head.appendChild(style);
+            return style.sheet;
+        }();
+        sheet.insertRule('::-webkit-scrollbar { width: 0 !important; display: none; }', 0);
+    }
 }
 
 function getPageDimensions() {

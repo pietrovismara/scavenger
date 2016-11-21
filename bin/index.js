@@ -55,7 +55,7 @@ var exec = function () {
                         return _context.abrupt('break', 44);
 
                     case 18:
-                        args = _.pick(argv, ['url', 'name', 'crop', 'format', 'selector']);
+                        args = _.pick(argv, ['url', 'name', 'width', 'crop', 'format', 'selector']);
                         debug('screenshot', args);
                         _context.next = 22;
                         return scavenger.screenshot(args);
@@ -84,7 +84,7 @@ var exec = function () {
                         return _context.abrupt('break', 44);
 
                     case 31:
-                        args = _.pick(argv, ['url', 'minify', 'name', 'crop', 'format', 'selector']);
+                        args = _.pick(argv, ['url', 'minify', 'name', 'width', 'crop', 'format', 'selector']);
                         debug('ss', args);
                         _context.next = 35;
                         return scavenger.scrape(args);
@@ -181,6 +181,11 @@ var commandOptions = {
         describe: 'HTML selector. Scraper will wait for the respective element to render. Has priority on the selectorChildren option.',
         string: 's',
         alias: 'selector'
+    },
+    w: {
+        describe: 'Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.',
+        string: 'w',
+        alias: 'width'
     }
 };
 

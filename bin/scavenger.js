@@ -32,7 +32,7 @@ var load = function () {
                             break;
                         }
 
-                        return _context.abrupt('return', _promise2.default.reject(new Error('Missing URL')));
+                        throw new Error('Missing URL');
 
                     case 4:
                         _context.next = 6;
@@ -155,14 +155,14 @@ var scrape = function () {
 
 var screenshot = function () {
     var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(options) {
-        var buffer, _parseOptions3, crop, format;
+        var buffer, _parseOptions3, width, crop, format;
 
         return _regenerator2.default.wrap(function _callee3$(_context3) {
             while (1) {
                 switch (_context3.prev = _context3.next) {
                     case 0:
                         debug('screenshot');
-                        buffer = void 0, _parseOptions3 = parseOptions(options), crop = _parseOptions3.crop, format = _parseOptions3.format;
+                        buffer = void 0, _parseOptions3 = parseOptions(options), width = _parseOptions3.width, crop = _parseOptions3.crop, format = _parseOptions3.format;
                         _context3.prev = 2;
                         _context3.next = 5;
                         return webdriver.isLoaded();
@@ -178,7 +178,7 @@ var screenshot = function () {
 
                     case 8:
                         _context3.next = 10;
-                        return webdriver.getScreenshot();
+                        return webdriver.getScreenshot(width);
 
                     case 10:
                         buffer = _context3.sent;
