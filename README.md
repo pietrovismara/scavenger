@@ -31,7 +31,7 @@ $ scavenger -h
 Save image to a png file:
 ```shell
 $ scavenger screenshot -u https://reddit.com
-$ // Creates a file called https_reddit_com.png
+$ # Creates a file called https_reddit_com.png
 ```
 Pipe image to ImageMagick display and show it:
 ```shell
@@ -50,14 +50,13 @@ $ scavenger screenshot -u https://reddit.com > reddit.html
 Or
 ```shell
 $ scavenger screenshot -u https://reddit.com
-$ // Creates a file called https_reddit_com.html
+$ # Creates a file called https_reddit_com.html
 ```
 
 ### Scrape + Screenshot
 ```shell
 $ scavenger ss -u https://reddit.com
 ```
-
 
 # Programmatic usage
 ```javascript
@@ -74,7 +73,7 @@ scavenger.scrape("https://reddit.com")
 ```
 
 ## API
-** .scrape() **
+**.scrape()**
 
 Returns a string containing the scraped page html
 
@@ -88,11 +87,12 @@ scavenger.scrape({
     url: String, // Url to scrape
     [selector]: String, // ID of a DOMElement to wait before scraping
     [minify]: Boolean, // If true, minify the html
+    [evaluate]: String // A function string to evaluate in the scraped page context
 })
 .then((html) => {});
 ```
 ---------------------
-** .screenshot() **
+**.screenshot()**
 
 Returns an object of buffers of the screenshot.
 
@@ -113,9 +113,10 @@ scavenger.screenshot({
     [selector]: String, // ID of a DOMElement to wait before scraping
     [format]: String, // Default: png. Available: jpeg, png.
     [crop]: Array [{
-        width: 1280,
-        height: 680
-    }]
+        width: Number,
+        height: Number
+    }],
+    [width]: Number // Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.
 })
 .then((buffers) => {
     console.log(buffers);
@@ -126,7 +127,7 @@ scavenger.screenshot({
 });
 ```
 --------------------------
-** .end() **
+**.end()**
 
 This method should always be called before scraping other pages.
 Calls `nightmare.end()`.
