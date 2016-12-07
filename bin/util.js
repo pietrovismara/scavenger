@@ -116,19 +116,6 @@ module.exports.setHttpHeaders = function (documentHTML) {
     };
 };
 
-module.exports.isUrlReachable = function (_url) {
-    return request({
-        method: 'HEAD',
-        url: _url,
-        resolveWithFullResponse: true
-    }).then(function (res) {
-        return res.statusCode === 200;
-    }).catch(function (err) {
-        debug(err);
-        return false;
-    });
-};
-
 module.exports.isJPEG = function (str) {
     if (!str || typeof str !== 'string') {
         return false;

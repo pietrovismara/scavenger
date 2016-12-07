@@ -36,46 +36,32 @@ var load = function () {
 
                     case 4:
                         _context.next = 6;
-                        return util.isUrlReachable(url);
-
-                    case 6:
-                        if (_context.sent) {
-                            _context.next = 8;
-                            break;
-                        }
-
-                        throw new Error("Invalid or unreachable URL");
-
-                    case 8:
-                        _context.next = 10;
                         return webdriver.load(url);
 
-                    case 10:
+                    case 6:
                         if (!selector) {
-                            _context.next = 13;
+                            _context.next = 9;
                             break;
                         }
 
-                        _context.next = 13;
+                        _context.next = 9;
                         return webdriver.waitForElement(selector);
 
-                    case 13:
-                        _context.next = 19;
+                    case 9:
+                        _context.next = 14;
                         break;
 
-                    case 15:
-                        _context.prev = 15;
+                    case 11:
+                        _context.prev = 11;
                         _context.t0 = _context['catch'](1);
-
-                        debug(_context.t0);
                         return _context.abrupt('return', _promise2.default.reject(_context.t0));
 
-                    case 19:
+                    case 14:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[1, 15]]);
+        }, _callee, this, [[1, 11]]);
     }));
 
     return function load(_x) {

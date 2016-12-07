@@ -146,7 +146,7 @@ var getScreenshot = function () {
 
                         end();
                         debug(_context3.t0);
-                        return _context3.abrupt('return', false);
+                        return _context3.abrupt('return', _promise2.default.reject(_context3.t0));
 
                     case 23:
                     case 'end':
@@ -195,7 +195,7 @@ var getHTML = function () {
 
                         end();
                         debug(_context4.t0);
-                        return _context4.abrupt('return', _context4.t0);
+                        return _context4.abrupt('return', _promise2.default.reject(_context4.t0));
 
                     case 15:
                     case 'end':
@@ -279,6 +279,9 @@ function load(url, waitMs, debugMode) {
     return nightmare.goto(url).wait(waitMs).catch(function (err) {
         debug(err);
         end();
+        if (!(err instanceof Error) && err.details) {
+            return _promise2.default.reject(new Error(err.message + ': ' + err.details));
+        }
         return _promise2.default.reject(err);
     });
 }
