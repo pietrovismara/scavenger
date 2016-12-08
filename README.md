@@ -7,7 +7,7 @@ Command line tool / Node.js package using [Nightmare](http://www.nightmarejs.org
 0. Supports dynamic (Angularjs, etc) and static web pages.
 0. Can be piped to other programs.
 0. Can be used from command line or programmatically
-0. Runs on any linux based os.
+0. Runs on any linux based os. (Probably on windows and mac too, but it hasn't been tested yet)
 
 # Install
 
