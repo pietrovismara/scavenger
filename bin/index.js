@@ -121,34 +121,33 @@ var exec = function () {
                         return _context.abrupt('break', 49);
 
                     case 49:
-                        _context.t1 = debug;
-                        _context.next = 52;
+                        _context.next = 51;
                         return scavenger.end();
 
-                    case 52:
-                        _context.t2 = _context.sent;
-                        (0, _context.t1)(_context.t2);
-                        _context.next = 59;
+                    case 51:
+                        _context.t1 = _context.sent;
+                        debug(_context.t1);
+                        _context.next = 58;
                         break;
 
-                    case 56:
-                        _context.prev = 56;
-                        _context.t3 = _context['catch'](2);
+                    case 55:
+                        _context.prev = 55;
+                        _context.t2 = _context['catch'](2);
 
-                        if (_context.t3.message) {
-                            process.stdout.write('Error: ' + _context.t3.message + '\n');
+                        if (_context.t2.message) {
+                            process.stdout.write('Error: ' + _context.t2.message + '\n');
                         }
 
-                    case 59:
+                    case 58:
 
                         process.exit();
 
-                    case 60:
+                    case 59:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[2, 56]]);
+        }, _callee, this, [[2, 55]]);
     }));
 
     return function exec(_x) {

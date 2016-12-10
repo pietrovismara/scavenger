@@ -4,6 +4,7 @@ Command line tool / Node.js package using [Nightmare](http://www.nightmarejs.org
 
 # Features
 
+0. Can extract data from html and convert it to JSON (only in programmatic use).
 0. Supports dynamic (Angularjs, etc) and static web pages.
 0. Can be piped to other programs.
 0. Can be used from command line or programmatically
@@ -60,27 +61,28 @@ $ scavenger ss -u https://reddit.com
 
 # Programmatic usage
 
+```javascript
+const scavenger = require('scavenger');
+```
+
 You can use scavenger methods at once:
 
 ```javascript
-const scavenger = require('scavenger');
-
 scavenger.scrape("https://reddit.com")
 .then((html) => {    
 
 })
 ```
 
-Or chain them and reuse the same Nightmarejs process for performance:
+Or chain them and reuse the same Nightmarejs process for faster results:
 
 ```javascript
-const scavenger = require('scavenger');
 scavenger.load("https://reddit.com")
 .then(() => {
-    return scavenger.scrape() // Doesn't need url since it's already loaded
+    return scavenger.scrape() // Can pass options, no url needed
 })
 .then((html) => {    
-    return scavenger.screenshot() // Doesn't need url since it's already loaded
+    return scavenger.screenshot() // Can pass options, no url needed
 })
 .then((buffers) => {    
     // Don't forget to call end when you chain methods or
@@ -144,18 +146,48 @@ scavenger.screenshot({
 });
 ```
 --------------------------
-**.end()**
+**.extract()**
 
-This method should always be called before scraping other pages.
-Calls `nightmare.end()`.
-Complete any queue operations, disconnect and close the electron process.
+See also the [examples](examples/extract.md).
+
+Extracts text from given html and returns it in json format. Supports tables or any element.
+
+Generic HTML elements:
 
 ```javascript
-scavenger.scrape("https://reddit.com")
-.then(() => {
-    return scavenger.end();
+scavenger.extract(String, {
+    html: String
+    containers: String, // css selector
+    fields: Object {
+        [field name]: String, // css selector
+        ...,
+    },
+    [groupBy]: String // a field name to group results by
 });
 ```
+
+A Table:
+
+```javascript
+scavenger.extract(String, {
+    html: String
+    table: String, // css selector
+    headers: Object {
+        [header name]: String, // css selector
+        ...,
+    },
+    [groupBy]: String // an header name to group results by
+});
+```
+
+--------------------------
+**.end()**
+
+This method needs to be called only at the end of chained methods execution.
+
+Calls `nightmare.end()`.
+
+Complete any queue operations, disconnect and close the electron process.
 
 
 

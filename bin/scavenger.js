@@ -241,11 +241,13 @@ var debug = require('debug')('scavenger:scavenger');
 var webdriver = require('./webdriver');
 var imager = require('./imager');
 var util = require('./util');
+var extr = require('./extract');
 
 var scavenger = {
     load: load,
     scrape: scrape,
     screenshot: screenshot,
+    extract: extract,
     end: end
 };
 
@@ -253,6 +255,14 @@ module.exports = scavenger;
 
 function end() {
     return webdriver.end();
+}
+
+function extract(html, opts) {
+    if (opts.table) {
+        return extr.table(html, opts);
+    }
+
+    return extr(html, opts);
 }
 
 function parseOptions(options) {
@@ -285,7 +295,8 @@ function parseCrop(crop) {
     function split(size) {
         if ((typeof size === 'undefined' ? 'undefined' : (0, _typeof3.default)(size)) === 'object') {
             return size;
-        } else if (typeof size === 'string') {
+        }
+        if (typeof size === 'string') {
             var splitted = size.split('X');
             return {
                 width: splitted[0],
