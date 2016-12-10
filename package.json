@@ -1,6 +1,6 @@
 {
   "name": "scavenger",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Command line tool / Node.js package using Nightmarejs to scrape/take screenshots of dynamic and static webpages.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
