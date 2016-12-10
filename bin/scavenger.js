@@ -71,46 +71,47 @@ var load = function () {
 
 var scrape = function () {
     var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(options) {
-        var html, _parseOptions2, minify, evaluate;
+        var html, autoEnd, _parseOptions2, minify, evaluate;
 
         return _regenerator2.default.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
                     case 0:
                         debug('scrape');
-                        html = void 0, _parseOptions2 = parseOptions(options), minify = _parseOptions2.minify, evaluate = _parseOptions2.evaluate;
+                        html = void 0, autoEnd = void 0, _parseOptions2 = parseOptions(options), minify = _parseOptions2.minify, evaluate = _parseOptions2.evaluate;
                         _context2.prev = 2;
                         _context2.next = 5;
                         return webdriver.isLoaded();
 
                     case 5:
                         if (_context2.sent) {
-                            _context2.next = 8;
+                            _context2.next = 9;
                             break;
                         }
 
-                        _context2.next = 8;
+                        autoEnd = true;
+                        _context2.next = 9;
                         return load(options);
 
-                    case 8:
-                        _context2.next = 10;
+                    case 9:
+                        _context2.next = 11;
                         return webdriver.getHTML(evaluate);
 
-                    case 10:
+                    case 11:
                         html = _context2.sent;
-                        _context2.next = 17;
+                        _context2.next = 18;
                         break;
 
-                    case 13:
-                        _context2.prev = 13;
+                    case 14:
+                        _context2.prev = 14;
                         _context2.t0 = _context2['catch'](2);
 
                         debug(_context2.t0);
                         return _context2.abrupt('return', _promise2.default.reject(_context2.t0));
 
-                    case 17:
+                    case 18:
                         if (!minify) {
-                            _context2.next = 19;
+                            _context2.next = 20;
                             break;
                         }
 
@@ -123,15 +124,24 @@ var scrape = function () {
                             removeComments: true
                         }));
 
-                    case 19:
+                    case 20:
+                        if (!autoEnd) {
+                            _context2.next = 23;
+                            break;
+                        }
+
+                        _context2.next = 23;
+                        return end();
+
+                    case 23:
                         return _context2.abrupt('return', html);
 
-                    case 20:
+                    case 24:
                     case 'end':
                         return _context2.stop();
                 }
             }
-        }, _callee2, this, [[2, 13]]);
+        }, _callee2, this, [[2, 14]]);
     }));
 
     return function scrape(_x2) {
@@ -141,71 +151,81 @@ var scrape = function () {
 
 var screenshot = function () {
     var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(options) {
-        var buffer, _parseOptions3, width, crop, format, evaluate;
+        var buffer, autoEnd, _parseOptions3, width, crop, format, evaluate;
 
         return _regenerator2.default.wrap(function _callee3$(_context3) {
             while (1) {
                 switch (_context3.prev = _context3.next) {
                     case 0:
                         debug('screenshot');
-                        buffer = void 0, _parseOptions3 = parseOptions(options), width = _parseOptions3.width, crop = _parseOptions3.crop, format = _parseOptions3.format, evaluate = _parseOptions3.evaluate;
+                        buffer = void 0, autoEnd = void 0, _parseOptions3 = parseOptions(options), width = _parseOptions3.width, crop = _parseOptions3.crop, format = _parseOptions3.format, evaluate = _parseOptions3.evaluate;
                         _context3.prev = 2;
                         _context3.next = 5;
                         return webdriver.isLoaded();
 
                     case 5:
                         if (_context3.sent) {
-                            _context3.next = 8;
+                            _context3.next = 9;
                             break;
                         }
 
-                        _context3.next = 8;
+                        autoEnd = true;
+                        _context3.next = 9;
                         return load(options);
 
-                    case 8:
-                        _context3.next = 10;
+                    case 9:
+                        _context3.next = 11;
                         return webdriver.getScreenshot(width, evaluate);
 
-                    case 10:
+                    case 11:
                         buffer = _context3.sent;
 
                         if (!(crop || format)) {
-                            _context3.next = 19;
+                            _context3.next = 20;
                             break;
                         }
 
-                        _context3.next = 14;
+                        _context3.next = 15;
                         return imager.load(buffer);
 
-                    case 14:
+                    case 15:
                         if (util.isJPEG(format)) {
                             imager.toJPEG();
                         }
                         imager.crop(parseCrop(crop));
-                        _context3.next = 18;
+                        _context3.next = 19;
                         return imager.getBuffers();
 
-                    case 18:
+                    case 19:
                         return _context3.abrupt('return', _context3.sent);
 
-                    case 19:
+                    case 20:
+                        if (!autoEnd) {
+                            _context3.next = 23;
+                            break;
+                        }
+
+                        _context3.next = 23;
+                        return end();
+
+                    case 23:
                         return _context3.abrupt('return', {
                             full: buffer
                         });
 
-                    case 22:
-                        _context3.prev = 22;
+                    case 26:
+                        _context3.prev = 26;
                         _context3.t0 = _context3['catch'](2);
 
                         debug(_context3.t0);
                         return _context3.abrupt('return', _promise2.default.reject(_context3.t0));
 
-                    case 26:
+                    case 30:
                     case 'end':
                         return _context3.stop();
                 }
             }
-        }, _callee3, this, [[2, 22]]);
+        }, _callee3, this, [[2, 26]]);
     }));
 
     return function screenshot(_x3) {

@@ -59,16 +59,33 @@ $ scavenger ss -u https://reddit.com
 ```
 
 # Programmatic usage
+
+You can use scavenger methods at once:
+
 ```javascript
 const scavenger = require('scavenger');
 
 scavenger.scrape("https://reddit.com")
 .then((html) => {    
-    return scavenger.screenshot()
+
+})
+```
+
+Or chain them and reuse the same Nightmarejs process for performance:
+
+```javascript
+const scavenger = require('scavenger');
+scavenger.load("https://reddit.com")
+.then(() => {
+    return scavenger.scrape() // Doesn't need url since it's already loaded
+})
+.then((html) => {    
+    return scavenger.screenshot() // Doesn't need url since it's already loaded
 })
 .then((buffers) => {    
-    return scavenger.end();
-    // Don't forget to call end! Otherwise you'll have memory leaks
+    // Don't forget to call end when you chain methods or
+    // the process will keep running and leaking memory
+    return scavenger.end();    
 })
 ```
 
