@@ -30,7 +30,7 @@ var exec = function () {
                         }
 
                         _context.t0 = argv._[0];
-                        _context.next = _context.t0 === 'scrape' ? 7 : _context.t0 === 'screenshot' ? 19 : _context.t0 === 'ss' ? 32 : 45;
+                        _context.next = _context.t0 === 'scrape' ? 7 : _context.t0 === 'screenshot' ? 19 : _context.t0 === 'ss' ? 32 : 49;
                         break;
 
                     case 7:
@@ -58,7 +58,7 @@ var exec = function () {
                         process.stdout.write(html);
 
                     case 18:
-                        return _context.abrupt('break', 45);
+                        return _context.abrupt('break', 49);
 
                     case 19:
                         args = _.pick(argv, ['url', 'name', 'width', 'crop', 'format', 'selector', 'evaluate']);
@@ -87,59 +87,68 @@ var exec = function () {
                         process.stdout.write(buffers.full);
 
                     case 31:
-                        return _context.abrupt('break', 45);
+                        return _context.abrupt('break', 49);
 
                     case 32:
                         args = _.pick(argv, ['url', 'minify', 'name', 'width', 'crop', 'format', 'selector', 'evaluate']);
                         debug('ss', args);
                         _context.next = 36;
-                        return scavenger.scrape(args);
+                        return scavenger.load(args);
 
                     case 36:
+                        _context.next = 38;
+                        return scavenger.scrape(args);
+
+                    case 38:
                         html = _context.sent;
-                        _context.next = 39;
+                        _context.next = 41;
                         return scavenger.screenshot(args);
 
-                    case 39:
+                    case 41:
                         buffers = _context.sent;
-                        _context.next = 42;
-                        return writeFile(name + '.html', html);
-
-                    case 42:
                         _context.next = 44;
-                        return writeBuffers(name, buffers, args.format);
-
-                    case 44:
-                        return _context.abrupt('break', 45);
-
-                    case 45:
-                        _context.next = 47;
                         return scavenger.end();
 
-                    case 47:
-                        _context.t1 = _context.sent;
-                        debug(_context.t1);
-                        _context.next = 54;
+                    case 44:
+                        _context.next = 46;
+                        return writeFile(name + '.html', html);
+
+                    case 46:
+                        _context.next = 48;
+                        return writeBuffers(name, buffers, args.format);
+
+                    case 48:
+                        return _context.abrupt('break', 49);
+
+                    case 49:
+                        _context.t1 = debug;
+                        _context.next = 52;
+                        return scavenger.end();
+
+                    case 52:
+                        _context.t2 = _context.sent;
+                        (0, _context.t1)(_context.t2);
+                        _context.next = 59;
                         break;
 
-                    case 51:
-                        _context.prev = 51;
-                        _context.t2 = _context['catch'](2);
+                    case 56:
+                        _context.prev = 56;
+                        _context.t3 = _context['catch'](2);
 
-                        if (_context.t2.message) {
-                            process.stdout.write('Error: ' + _context.t2.message + '\n');
+                        if (_context.t3.message) {
+                            process.stdout.write('Error: ' + _context.t3.message + '\n');
                         }
 
-                    case 54:
+                    case 59:
 
                         process.exit();
 
-                    case 55:
+                    case 60:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[2, 51]]);
+        }, _callee, this, [[2, 56]]);
     }));
 
     return function exec(_x) {
