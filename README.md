@@ -1,6 +1,6 @@
 # Scavenger
 
-Command line tool / Node.js package using [Nightmare](http://www.nightmarejs.org/) to scrape/take screenshots of dynamic and static webpages.
+Command line tool / Node.js package for scraping/taking screenshots of dynamic and static webpages using [Nightmare](http://www.nightmarejs.org/).
 
 # Features
 
@@ -20,6 +20,190 @@ As a local package:
 ```shell
 $ npm install scavenger
 ```
+
+# Programmatic usage
+
+```javascript
+const scavenger = require('scavenger');
+```
+
+Minimalistic usage:
+
+```javascript
+scavenger.scrape("https://reddit.com")
+.then((html) => {})
+```
+
+
+## API
+**.scrape(url, options, mapFn)**
+
+`url` can be either a `String` or an `Array`, in which case scavenger will scrape every given url in sequence.
+
+The result can be a `String` or an `Array` depending on `url` and `mapFn`.
+
+`mapFn` is a function which is executed for every `url` and takes as argument the html of the scraped page. Can be passed as second argument if no options are passed. See `.extract` and `.createExtractor` for more info.
+
+```javascript
+scavenger.scrape(url)
+.then((html) => {
+    console.log(html);
+    // '<body>....</body>'
+});
+
+// Or
+scavenger.scrape(url, {    
+    selector: '#id', // ID of a DOMElement to wait before scraping
+    minify: false, // If true, minify the html
+    evaluate: function(){} // A function string to evaluate in the scraped page context
+})
+.then((html) => {});
+
+
+// Multiple urls with mapFn (get length of html for each scraped page)
+scavenger.scrape(urls, {/*options*/}, html => html.length)
+.then((htmlLengths) => {
+    console.log(htmlLengths);
+    // [10040, 22351, ...]
+});
+
+```
+---------------------
+**.screenshot(url, options)**
+
+Returns an object of buffers of the screenshot.
+
+
+```javascript
+scavenger.screenshot(url)
+.then((buffers) => {
+    console.log(buffers);
+    // {
+    //     "full": <Buffer>
+    // }
+});
+
+// Or
+
+scavenger.screenshot(url, {    
+    selector: '#id', // ID of a DOMElement to wait before scraping
+    format: 'png', // Default: png. Available: jpeg, png.
+    crop: [{
+        width: 1280,
+        height: 680
+    }, ...],
+    width: 1280 // Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.
+})
+.then((buffers) => {
+    console.log(buffers);
+    // {
+    //     "full": <Buffer>,
+    //     "1280X680": <Buffer>
+    // }
+});
+```
+
+--------------------------
+**.ss(url, options)**
+
+Combines `.scrape` and `.screenshot`.
+
+```javascript
+scavenger.screenshot(url, {    
+    selector: '#id',
+    minify: false,
+    evaluate: function(){},
+    format: 'png',
+    crop: [{
+        width: 1280,
+        height: 680
+    }, ...],
+    width: 1280
+})
+.then((result) => {
+    console.log(result);
+    // {
+    //    html: '',
+    //    buffers: {
+    //        "full": <Buffer>,
+    //        "1280X680": <Buffer>
+    //    }
+    // }
+});
+```
+
+
+--------------------------
+**.extract(html, options)**
+
+See also the [examples](examples/extract.md).
+
+Extracts text from given html and returns it in json format. Supports tables or any element.
+
+Generic HTML elements:
+
+```javascript
+const authors = scavenger.extract(html, {
+    scope: '.class', // Any css selector
+    fields: { // Fields are found within the scope element if given
+        author: 'h3.author', // Any css selector
+        url: {
+            selector: 'a.link',
+            attribute: 'href' // Gets the href attribute value for the element found with selector
+        },
+        any: '',
+        ...
+    },
+    groupBy: 'author' // a field name to group results by
+});
+
+// Or passing just the fields
+scavenger.extract(html, {    
+    author: 'h3.author',
+    url: {
+        selector: 'a.link',
+        attribute: 'href'
+    },
+    any: '',
+    ...    
+});
+```
+
+A Table:
+
+```javascript
+scavenger.extract(html, {
+    table: '.class table', // Any css selector
+    headers: ['header1', 'header2', ...], // Names of the table headers in the same order they are on page
+    groupBy: 'header1'
+});
+```
+
+--------------------------
+
+**.createExtractor(options, fn)**
+
+See also the [examples](examples/extract.md).
+
+Helper method. Returns an extract function which can be passed to `.scrape` as `mapFn`.
+
+If no `fn` is passed, `.extract` will be used by default.
+
+```javascript
+const extract = scavenger.createExtractor({
+    scope: 'section',
+    fields: {
+        title: 'h1.fly-title',
+        headline: 'article h2.headline',
+        rubric: 'article p.rubric'
+    }
+});
+
+return scavenger.scrape('http://www.economist.com', extract);
+```
+
+-------------------------
+
 
 # Command line usage
 
@@ -58,137 +242,6 @@ $ # Creates a file called https_reddit_com.html
 ```shell
 $ scavenger ss -u https://reddit.com
 ```
-
-# Programmatic usage
-
-```javascript
-const scavenger = require('scavenger');
-```
-
-You can use scavenger methods at once:
-
-```javascript
-scavenger.scrape("https://reddit.com")
-.then((html) => {    
-
-})
-```
-
-Or chain them and reuse the same Nightmarejs process for faster results:
-
-```javascript
-scavenger.load("https://reddit.com")
-.then(() => {
-    return scavenger.scrape() // Can pass options, no url needed
-})
-.then((html) => {    
-    return scavenger.screenshot() // Can pass options, no url needed
-})
-.then((buffers) => {    
-    // Don't forget to call end when you chain methods or
-    // the process will keep running and leaking memory
-    return scavenger.end();    
-})
-```
-
-## API
-**.scrape()**
-
-Returns a string containing the scraped page html
-
-```javascript
-scavenger.scrape(url)
-.then((html) => {});
-
-// Or
-
-scavenger.scrape({
-    url: String, // Url to scrape
-    [selector]: String, // ID of a DOMElement to wait before scraping
-    [minify]: Boolean, // If true, minify the html
-    [evaluate]: String // A function string to evaluate in the scraped page context
-})
-.then((html) => {});
-```
----------------------
-**.screenshot()**
-
-Returns an object of buffers of the screenshot.
-
-
-```javascript
-scavenger.screenshot(url)
-.then((buffers) => {
-    console.log(buffers);
-    // {
-    //     "full": <Buffer>
-    // }
-});
-
-// Or
-
-scavenger.screenshot({
-    url: String, // Url to scrape
-    [selector]: String, // ID of a DOMElement to wait before scraping
-    [format]: String, // Default: png. Available: jpeg, png.
-    [crop]: Array [{
-        width: Number,
-        height: Number
-    }],
-    [width]: Number // Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.
-})
-.then((buffers) => {
-    console.log(buffers);
-    // {
-    //     "full": <Buffer>,
-    //     "1280X680": <Buffer>
-    // }
-});
-```
---------------------------
-**.extract()**
-
-See also the [examples](examples/extract.md).
-
-Extracts text from given html and returns it in json format. Supports tables or any element.
-
-Generic HTML elements:
-
-```javascript
-scavenger.extract(String, {
-    html: String
-    containers: String, // css selector
-    fields: Object {
-        [field name]: String, // css selector
-        ...,
-    },
-    [groupBy]: String // a field name to group results by
-});
-```
-
-A Table:
-
-```javascript
-scavenger.extract(String, {
-    html: String
-    table: String, // css selector
-    headers: Object {
-        [header name]: String, // css selector
-        ...,
-    },
-    [groupBy]: String // an header name to group results by
-});
-```
-
---------------------------
-**.end()**
-
-This method needs to be called only at the end of chained methods execution.
-
-Calls `nightmare.end()`.
-
-Complete any queue operations, disconnect and close the electron process.
-
 
 
 # License

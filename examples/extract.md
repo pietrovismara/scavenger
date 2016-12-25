@@ -72,19 +72,20 @@ The page markup is composed like this:
 We proceed like this:
 
 ```javascript
+const extract = scavenger.createExtractor({
+    scope: 'ul.search-results li',
+    fields: {
+        name: 'h3 a.name',
+        author: 'h3 a.author',
+        description: 'p.description',
+        stars: 'p.stats span.stars',
+        version: 'p.stats span.version'
+    }
+});
 
-scavenger.scrape('https://www.npmjs.com/search?q=redis')
-.then((html) => {        
-    return scavenger.extract(html, {
-        containers: 'ul.search-results li',
-        fields: {
-            name: 'h3 a.name',
-            author: 'h3 a.author',
-            description: 'p.description',
-            stars: 'p.stats span.stars',
-            version: 'p.stats span.version'
-        }        
-    });
+scavenger.scrape('https://www.npmjs.com/search?q=redis', extract)
+.then((packages) => {
+
 })
 ```
 
@@ -118,7 +119,7 @@ The result will be an array of objects representing the contents of the page:
 
 ```   
 
-Passing the option `groupBy: 'author'` to `scavenger.extract`:
+Passing the option `groupBy: 'author'` to `.createExtractor`:
 
 ```json
 {
@@ -259,21 +260,23 @@ The page markup is composed like this:
 Our code:
 
 ```javascript
-scavenger.scrape('http://sports.williamhill.it/bet_ita/it/betting/t/321/Serie+A.html')
-.then((html) => {
-    return scavenger.extract(html, {
-        table: '.marketHolderExpanded table', // css selector
-        headers: [
-            'date', 'time', 'teams', '', '1', 'X', '2', 'betsAmount'
-        ],        
-    })
+const extract = scavenger.createExtractor({
+    table: '.marketHolderExpanded table', // css selector
+    headers: [
+        'date', 'time', 'teams', '', '1', 'X', '2', 'betsAmount'
+    ],
+});
+
+scavenger.scrape('http://sports.williamhill.it/bet_ita/it/betting/t/321/Serie+A.html', extract);
+.then((matches) => {
+
 })
 
 ```
 
 The `headers` we pass must be ordered as the table's columns.
 
-Passing empty strings as headers will cause to ignore a column.
+Passing empty strings as headers will cause scavenger to ignore a column.
 
 In this case we pass an empty string between `teams` and `1` to skip an empty spacing column.
 

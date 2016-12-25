@@ -1,121 +1,294 @@
 "use strict";
 
-var _typeof2 = require('babel-runtime/helpers/typeof');
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _promise = require('babel-runtime/core-js/promise');
-
-var _promise2 = _interopRequireDefault(_promise);
 
 var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var load = function () {
-    var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(options) {
-        var _parseOptions, url, selector;
+var ss = function () {
+    var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+        var _this = this;
 
-        return _regenerator2.default.wrap(function _callee$(_context) {
-            while (1) {
-                switch (_context.prev = _context.next) {
-                    case 0:
-                        _parseOptions = parseOptions(options), url = _parseOptions.url, selector = _parseOptions.selector;
-                        _context.prev = 1;
-
-                        if (url) {
-                            _context.next = 4;
-                            break;
-                        }
-
-                        throw new Error('Missing URL');
-
-                    case 4:
-                        _context.next = 6;
-                        return webdriver.load(url);
-
-                    case 6:
-                        if (!selector) {
-                            _context.next = 9;
-                            break;
-                        }
-
-                        _context.next = 9;
-                        return webdriver.waitForElement(selector);
-
-                    case 9:
-                        _context.next = 14;
-                        break;
-
-                    case 11:
-                        _context.prev = 11;
-                        _context.t0 = _context['catch'](1);
-                        return _context.abrupt('return', _promise2.default.reject(_context.t0));
-
-                    case 14:
-                    case 'end':
-                        return _context.stop();
-                }
-            }
-        }, _callee, this, [[1, 11]]);
-    }));
-
-    return function load(_x) {
-        return _ref.apply(this, arguments);
-    };
-}();
-
-var scrape = function () {
-    var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(options) {
-        var html, autoEnd, _parseOptions2, minify, evaluate;
+        var _parser$parseArgs,
+            tasks,
+            options,
+            mapFunc,
+            results,
+            _args2 = arguments;
 
         return _regenerator2.default.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
                     case 0:
-                        debug('scrape');
-                        html = void 0, autoEnd = void 0, _parseOptions2 = parseOptions(options), minify = _parseOptions2.minify, evaluate = _parseOptions2.evaluate;
-                        _context2.prev = 2;
+                        debug('ss');
+                        _parser$parseArgs = parser.parseArgs(_args2), tasks = _parser$parseArgs.tasks, options = _parser$parseArgs.options, mapFunc = _parser$parseArgs.mapFunc;
+
+
+                        webdriver.load();
                         _context2.next = 5;
+                        return Promise.mapSeries(tasks, function () {
+                            var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(task) {
+                                var opt, html, buffers;
+                                return _regenerator2.default.wrap(function _callee$(_context) {
+                                    while (1) {
+                                        switch (_context.prev = _context.next) {
+                                            case 0:
+                                                task = parser.parseOptions(task);
+                                                opt = task.options || options;
+                                                _context.next = 4;
+                                                return webdriver.goto(task.url);
+
+                                            case 4:
+                                                _context.next = 6;
+                                                return scrapeOnce(opt);
+
+                                            case 6:
+                                                html = _context.sent;
+                                                _context.next = 9;
+                                                return screenshotOnce(opt);
+
+                                            case 9:
+                                                buffers = _context.sent;
+                                                return _context.abrupt('return', {
+                                                    html: mapFunc(html),
+                                                    buffers: mapFunc(buffers)
+                                                });
+
+                                            case 11:
+                                            case 'end':
+                                                return _context.stop();
+                                        }
+                                    }
+                                }, _callee, _this);
+                            }));
+
+                            return function (_x) {
+                                return _ref2.apply(this, arguments);
+                            };
+                        }());
+
+                    case 5:
+                        results = _context2.sent;
+                        _context2.next = 8;
+                        return end();
+
+                    case 8:
+                        return _context2.abrupt('return', results.length > 1 ? results : results[0]);
+
+                    case 9:
+                    case 'end':
+                        return _context2.stop();
+                }
+            }
+        }, _callee2, this);
+    }));
+
+    return function ss() {
+        return _ref.apply(this, arguments);
+    };
+}();
+
+var screenshot = function () {
+    var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
+        var _this2 = this;
+
+        var _parser$parseArgs2,
+            tasks,
+            options,
+            mapFunc,
+            results,
+            _args4 = arguments;
+
+        return _regenerator2.default.wrap(function _callee4$(_context4) {
+            while (1) {
+                switch (_context4.prev = _context4.next) {
+                    case 0:
+                        debug('screenshot');
+                        _parser$parseArgs2 = parser.parseArgs(_args4), tasks = _parser$parseArgs2.tasks, options = _parser$parseArgs2.options, mapFunc = _parser$parseArgs2.mapFunc;
+
+
+                        webdriver.load();
+                        _context4.next = 5;
+                        return Promise.mapSeries(tasks, function () {
+                            var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(task) {
+                                var opt, buffers;
+                                return _regenerator2.default.wrap(function _callee3$(_context3) {
+                                    while (1) {
+                                        switch (_context3.prev = _context3.next) {
+                                            case 0:
+                                                task = parser.parseOptions(task);
+                                                opt = task.options || options;
+                                                _context3.next = 4;
+                                                return webdriver.goto(task.url);
+
+                                            case 4:
+                                                _context3.next = 6;
+                                                return screenshotOnce(opt);
+
+                                            case 6:
+                                                buffers = _context3.sent;
+                                                return _context3.abrupt('return', mapFunc(buffers));
+
+                                            case 8:
+                                            case 'end':
+                                                return _context3.stop();
+                                        }
+                                    }
+                                }, _callee3, _this2);
+                            }));
+
+                            return function (_x2) {
+                                return _ref4.apply(this, arguments);
+                            };
+                        }());
+
+                    case 5:
+                        results = _context4.sent;
+                        _context4.next = 8;
+                        return end();
+
+                    case 8:
+                        return _context4.abrupt('return', results.length > 1 ? results : results[0]);
+
+                    case 9:
+                    case 'end':
+                        return _context4.stop();
+                }
+            }
+        }, _callee4, this);
+    }));
+
+    return function screenshot() {
+        return _ref3.apply(this, arguments);
+    };
+}();
+
+var scrape = function () {
+    var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6() {
+        var _this3 = this;
+
+        var _parser$parseArgs3,
+            tasks,
+            options,
+            mapFunc,
+            results,
+            _args6 = arguments;
+
+        return _regenerator2.default.wrap(function _callee6$(_context6) {
+            while (1) {
+                switch (_context6.prev = _context6.next) {
+                    case 0:
+                        debug('scrape');
+                        _parser$parseArgs3 = parser.parseArgs(_args6), tasks = _parser$parseArgs3.tasks, options = _parser$parseArgs3.options, mapFunc = _parser$parseArgs3.mapFunc;
+
+
+                        webdriver.load();
+                        _context6.next = 5;
+                        return Promise.mapSeries(tasks, function () {
+                            var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(task) {
+                                var opt, html;
+                                return _regenerator2.default.wrap(function _callee5$(_context5) {
+                                    while (1) {
+                                        switch (_context5.prev = _context5.next) {
+                                            case 0:
+                                                task = parser.parseOptions(task);
+                                                opt = task.options || options;
+                                                _context5.next = 4;
+                                                return webdriver.goto(task.url);
+
+                                            case 4:
+                                                _context5.next = 6;
+                                                return scrapeOnce(opt);
+
+                                            case 6:
+                                                html = _context5.sent;
+                                                return _context5.abrupt('return', mapFunc(html));
+
+                                            case 8:
+                                            case 'end':
+                                                return _context5.stop();
+                                        }
+                                    }
+                                }, _callee5, _this3);
+                            }));
+
+                            return function (_x3) {
+                                return _ref6.apply(this, arguments);
+                            };
+                        }());
+
+                    case 5:
+                        results = _context6.sent;
+                        _context6.next = 8;
+                        return end();
+
+                    case 8:
+                        return _context6.abrupt('return', results.length > 1 ? results : results[0]);
+
+                    case 9:
+                    case 'end':
+                        return _context6.stop();
+                }
+            }
+        }, _callee6, this);
+    }));
+
+    return function scrape() {
+        return _ref5.apply(this, arguments);
+    };
+}();
+
+var scrapeOnce = function () {
+    var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(options) {
+        var _parser$parseOptions, url, minify, evaluate, html, autoEnd;
+
+        return _regenerator2.default.wrap(function _callee7$(_context7) {
+            while (1) {
+                switch (_context7.prev = _context7.next) {
+                    case 0:
+                        _parser$parseOptions = parser.parseOptions(options), url = _parser$parseOptions.url, minify = _parser$parseOptions.minify, evaluate = _parser$parseOptions.evaluate;
+                        html = void 0, autoEnd = void 0;
+                        _context7.prev = 2;
+                        _context7.next = 5;
                         return webdriver.isLoaded();
 
                     case 5:
-                        if (_context2.sent) {
-                            _context2.next = 9;
+                        if (_context7.sent) {
+                            _context7.next = 10;
                             break;
                         }
 
                         autoEnd = true;
-                        _context2.next = 9;
-                        return load(options);
+                        webdriver.load();
+                        _context7.next = 10;
+                        return webdriver.goto(url);
 
-                    case 9:
-                        _context2.next = 11;
+                    case 10:
+                        _context7.next = 12;
                         return webdriver.getHTML(evaluate);
 
-                    case 11:
-                        html = _context2.sent;
-                        _context2.next = 18;
+                    case 12:
+                        html = _context7.sent;
+                        _context7.next = 19;
                         break;
 
-                    case 14:
-                        _context2.prev = 14;
-                        _context2.t0 = _context2['catch'](2);
+                    case 15:
+                        _context7.prev = 15;
+                        _context7.t0 = _context7['catch'](2);
 
-                        debug(_context2.t0);
-                        return _context2.abrupt('return', _promise2.default.reject(_context2.t0));
+                        debug(_context7.t0);
+                        return _context7.abrupt('return', Promise.reject(_context7.t0));
 
-                    case 18:
+                    case 19:
                         if (!minify) {
-                            _context2.next = 20;
+                            _context7.next = 21;
                             break;
                         }
 
-                        return _context2.abrupt('return', minifier(html, {
+                        return _context7.abrupt('return', minifier(html, {
                             collapseWhitespace: true,
                             conservativeCollapse: true,
                             removeAttributeQuotes: true,
@@ -124,131 +297,137 @@ var scrape = function () {
                             removeComments: true
                         }));
 
-                    case 20:
+                    case 21:
                         if (!autoEnd) {
-                            _context2.next = 23;
+                            _context7.next = 24;
                             break;
                         }
 
-                        _context2.next = 23;
+                        _context7.next = 24;
                         return end();
 
-                    case 23:
-                        return _context2.abrupt('return', html);
-
                     case 24:
+                        return _context7.abrupt('return', html);
+
+                    case 25:
                     case 'end':
-                        return _context2.stop();
+                        return _context7.stop();
                 }
             }
-        }, _callee2, this, [[2, 14]]);
+        }, _callee7, this, [[2, 15]]);
     }));
 
-    return function scrape(_x2) {
-        return _ref2.apply(this, arguments);
+    return function scrapeOnce(_x4) {
+        return _ref7.apply(this, arguments);
     };
 }();
 
-var screenshot = function () {
-    var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(options) {
-        var buffer, autoEnd, _parseOptions3, width, crop, format, evaluate;
+var screenshotOnce = function () {
+    var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(options) {
+        var _parser$parseOptions2, url, width, crop, format, evaluate, buffer, autoEnd;
 
-        return _regenerator2.default.wrap(function _callee3$(_context3) {
+        return _regenerator2.default.wrap(function _callee8$(_context8) {
             while (1) {
-                switch (_context3.prev = _context3.next) {
+                switch (_context8.prev = _context8.next) {
                     case 0:
-                        debug('screenshot');
-                        buffer = void 0, autoEnd = void 0, _parseOptions3 = parseOptions(options), width = _parseOptions3.width, crop = _parseOptions3.crop, format = _parseOptions3.format, evaluate = _parseOptions3.evaluate;
-                        _context3.prev = 2;
-                        _context3.next = 5;
+                        _parser$parseOptions2 = parser.parseOptions(options), url = _parser$parseOptions2.url, width = _parser$parseOptions2.width, crop = _parser$parseOptions2.crop, format = _parser$parseOptions2.format, evaluate = _parser$parseOptions2.evaluate;
+                        buffer = void 0, autoEnd = void 0;
+                        _context8.prev = 2;
+                        _context8.next = 5;
                         return webdriver.isLoaded();
 
                     case 5:
-                        if (_context3.sent) {
-                            _context3.next = 9;
+                        if (_context8.sent) {
+                            _context8.next = 10;
                             break;
                         }
 
                         autoEnd = true;
-                        _context3.next = 9;
-                        return load(options);
+                        webdriver.load();
+                        _context8.next = 10;
+                        return webdriver.goto(url);
 
-                    case 9:
-                        _context3.next = 11;
+                    case 10:
+                        _context8.next = 12;
                         return webdriver.getScreenshot(width, evaluate);
 
-                    case 11:
-                        buffer = _context3.sent;
+                    case 12:
+                        buffer = _context8.sent;
 
                         if (!(crop || format)) {
-                            _context3.next = 20;
+                            _context8.next = 21;
                             break;
                         }
 
-                        _context3.next = 15;
+                        _context8.next = 16;
                         return imager.load(buffer);
 
-                    case 15:
+                    case 16:
                         if (util.isJPEG(format)) {
                             imager.toJPEG();
                         }
-                        imager.crop(parseCrop(crop));
-                        _context3.next = 19;
+                        imager.crop(parser.parseCrop(crop));
+                        _context8.next = 20;
                         return imager.getBuffers();
 
-                    case 19:
-                        return _context3.abrupt('return', _context3.sent);
-
                     case 20:
+                        return _context8.abrupt('return', _context8.sent);
+
+                    case 21:
                         if (!autoEnd) {
-                            _context3.next = 23;
+                            _context8.next = 24;
                             break;
                         }
 
-                        _context3.next = 23;
+                        _context8.next = 24;
                         return end();
 
-                    case 23:
-                        return _context3.abrupt('return', {
+                    case 24:
+                        return _context8.abrupt('return', {
                             full: buffer
                         });
 
-                    case 26:
-                        _context3.prev = 26;
-                        _context3.t0 = _context3['catch'](2);
+                    case 27:
+                        _context8.prev = 27;
+                        _context8.t0 = _context8['catch'](2);
 
-                        debug(_context3.t0);
-                        return _context3.abrupt('return', _promise2.default.reject(_context3.t0));
+                        debug(_context8.t0);
+                        return _context8.abrupt('return', Promise.reject(_context8.t0));
 
-                    case 30:
+                    case 31:
                     case 'end':
-                        return _context3.stop();
+                        return _context8.stop();
                 }
             }
-        }, _callee3, this, [[2, 26]]);
+        }, _callee8, this, [[2, 27]]);
     }));
 
-    return function screenshot(_x3) {
-        return _ref3.apply(this, arguments);
+    return function screenshotOnce(_x5) {
+        return _ref8.apply(this, arguments);
     };
 }();
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _ = require('lodash');
+var Promise = require('bluebird');
+var querystring = require('querystring');
 var minifier = require('html-minifier').minify;
 var debug = require('debug')('scavenger:scavenger');
 var webdriver = require('./webdriver');
 var imager = require('./imager');
 var util = require('./util');
 var extr = require('./extract');
+var parser = require('./parser');
 
 var scavenger = {
-    load: load,
-    scrape: scrape,
     screenshot: screenshot,
+    scrape: scrape,
+    ss: ss,
     extract: extract,
-    end: end
+    createExtractor: createExtractor,
+    createMapFn: createMapFn,
+    paginateUrl: paginateUrl
 };
 
 module.exports = scavenger;
@@ -257,53 +436,40 @@ function end() {
     return webdriver.end();
 }
 
+function createExtractor(options, fn) {
+    return createMapFn(options, fn ? fn : extract);
+}
+
+function createMapFn(options, fn) {
+    return function (data) {
+        return fn(data, options);
+    };
+}
+
 function extract(html, opts) {
     if (opts.table) {
         return extr.table(html, opts);
     }
 
+    opts = parser.parseExtractOptions(opts);
+    _.forEach(opts.fields, function (field, key) {
+        opts.fields[key] = parser.parseField(field);
+    });
+
     return extr(html, opts);
 }
 
-function parseOptions(options) {
-    if (!options) {
-        return {};
+function paginateUrl(options) {
+    var baseUrl = options.baseUrl,
+        params = options.params,
+        paginationParam = options.paginationParam,
+        limit = options.limit,
+        step = options.step;
+
+    var urls = [];
+    while (params[paginationParam] < limit) {
+        urls.push('' + baseUrl + querystring.stringify(params));
+        params[paginationParam] += step;
     }
-
-    if (typeof options === 'string') {
-        return {
-            url: options
-        };
-    }
-
-    if ((typeof options === 'undefined' ? 'undefined' : (0, _typeof3.default)(options)) === 'object') {
-        return options;
-    }
-}
-
-function parseCrop(crop) {
-    if (!crop || !crop.length) {
-        return [];
-    }
-
-    if (typeof crop === 'string') {
-        return [split(crop)];
-    }
-
-    return _.map(crop, split);
-
-    function split(size) {
-        if ((typeof size === 'undefined' ? 'undefined' : (0, _typeof3.default)(size)) === 'object') {
-            return size;
-        }
-        if (typeof size === 'string') {
-            var splitted = size.split('X');
-            return {
-                width: splitted[0],
-                height: splitted[1]
-            };
-        }
-
-        return {};
-    }
+    return urls;
 }

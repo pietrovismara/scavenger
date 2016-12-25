@@ -49,7 +49,6 @@ var _ = require('lodash');
 var Promise = require('bluebird');
 var debug = require('debug')('scavenger:imager');
 var jimp = require('jimp');
-
 var mime = jimp.MIME_PNG;
 
 var imager = {

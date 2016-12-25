@@ -15,7 +15,7 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var exec = function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(argv) {
-        var args, html, buffers, name;
+        var args, html, buffers, name, results;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -30,14 +30,14 @@ var exec = function () {
                         }
 
                         _context.t0 = argv._[0];
-                        _context.next = _context.t0 === 'scrape' ? 7 : _context.t0 === 'screenshot' ? 19 : _context.t0 === 'ss' ? 32 : 49;
+                        _context.next = _context.t0 === 'scrape' ? 7 : _context.t0 === 'screenshot' ? 19 : _context.t0 === 'ss' ? 32 : 42;
                         break;
 
                     case 7:
-                        args = _.pick(argv, ['url', 'name', 'minify', 'selector', 'evaluate']);
+                        args = _.pick(argv, ['name', 'minify', 'selector', 'evaluate']);
                         debug('scrape', args);
                         _context.next = 11;
-                        return scavenger.scrape(args);
+                        return scavenger.scrape(argv.url, args);
 
                     case 11:
                         html = _context.sent;
@@ -58,13 +58,13 @@ var exec = function () {
                         process.stdout.write(html);
 
                     case 18:
-                        return _context.abrupt('break', 49);
+                        return _context.abrupt('break', 42);
 
                     case 19:
-                        args = _.pick(argv, ['url', 'name', 'width', 'crop', 'format', 'selector', 'evaluate']);
+                        args = _.pick(argv, ['name', 'width', 'crop', 'format', 'selector', 'evaluate']);
                         debug('screenshot', args);
                         _context.next = 23;
-                        return scavenger.screenshot(args);
+                        return scavenger.screenshot(argv.url, args);
 
                     case 23:
                         buffers = _context.sent;
@@ -87,67 +87,48 @@ var exec = function () {
                         process.stdout.write(buffers.full);
 
                     case 31:
-                        return _context.abrupt('break', 49);
+                        return _context.abrupt('break', 42);
 
                     case 32:
-                        args = _.pick(argv, ['url', 'minify', 'name', 'width', 'crop', 'format', 'selector', 'evaluate']);
+                        args = _.pick(argv, ['minify', 'name', 'width', 'crop', 'format', 'selector', 'evaluate']);
                         debug('ss', args);
                         _context.next = 36;
-                        return scavenger.load(args);
+                        return scavenger.ss(argv.url, args);
 
                     case 36:
-                        _context.next = 38;
-                        return scavenger.scrape(args);
+                        results = _context.sent;
+                        _context.next = 39;
+                        return writeFile(name + '.html', results.html);
 
-                    case 38:
-                        html = _context.sent;
+                    case 39:
                         _context.next = 41;
-                        return scavenger.screenshot(args);
+                        return writeBuffers(name, results.buffer, args.format);
 
                     case 41:
-                        buffers = _context.sent;
-                        _context.next = 44;
-                        return scavenger.end();
+                        return _context.abrupt('break', 42);
 
-                    case 44:
-                        _context.next = 46;
-                        return writeFile(name + '.html', html);
-
-                    case 46:
-                        _context.next = 48;
-                        return writeBuffers(name, buffers, args.format);
-
-                    case 48:
-                        return _context.abrupt('break', 49);
-
-                    case 49:
-                        _context.next = 51;
-                        return scavenger.end();
-
-                    case 51:
-                        _context.t1 = _context.sent;
-                        debug(_context.t1);
-                        _context.next = 58;
+                    case 42:
+                        _context.next = 47;
                         break;
 
-                    case 55:
-                        _context.prev = 55;
-                        _context.t2 = _context['catch'](2);
+                    case 44:
+                        _context.prev = 44;
+                        _context.t1 = _context['catch'](2);
 
-                        if (_context.t2.message) {
-                            process.stdout.write('Error: ' + _context.t2.message + '\n');
+                        if (_context.t1.message) {
+                            process.stdout.write('Error: ' + _context.t1.message + '\n');
                         }
 
-                    case 58:
+                    case 47:
 
                         process.exit();
 
-                    case 59:
+                    case 48:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[2, 55]]);
+        }, _callee, this, [[2, 44]]);
     }));
 
     return function exec(_x) {
