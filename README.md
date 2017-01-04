@@ -104,9 +104,9 @@ scavenger.screenshot(url, {
 ```
 
 --------------------------
-**.ss(url, options)**
+**.ss(url, options, mapFn)**
 
-Combines `.scrape` and `.screenshot`.
+Combines `.scrape` and `.screenshot`. If `mapFn` is passed, it will be executed on html only.
 
 ```javascript
 scavenger.screenshot(url, {    
@@ -167,16 +167,7 @@ scavenger.extract(html, {
     any: '',
     ...    
 });
-```
 
-A Table:
-
-```javascript
-scavenger.extract(html, {
-    table: '.class table', // Any css selector
-    headers: ['header1', 'header2', ...], // Names of the table headers in the same order they are on page
-    groupBy: 'header1'
-});
 ```
 
 --------------------------
