@@ -261,24 +261,25 @@ Our code:
 
 ```javascript
 const extract = scavenger.createExtractor({
-    table: '.marketHolderExpanded table', // css selector
-    headers: [
-        'date', 'time', 'teams', '', '1', 'X', '2', 'betsAmount'
-    ],
+    scope: '.rowOdd',
+    fields: {
+        date: 'td:nth-child(1) span',
+        time: 'td:nth-child(2) span',
+        teams: 'td:nth-child(3) a span',
+        '1': 'td:nth-child(5) div div',
+        X: 'td:nth-child(6) div div',
+        '2': 'td:nth-child(7) div div',
+        betsAmount: 'td:nth-child(8) div a nobr'
+    },
+    groupBy: 'teams'
 });
 
-scavenger.scrape('http://sports.williamhill.it/bet_ita/it/betting/t/321/Serie+A.html', extract);
+scavenger.scrape('http://sports.williamhill.it/bet_ita/it/betting/t/315/Germania+Bundesliga.html', extract)
 .then((matches) => {
 
-})
+});
 
 ```
-
-The `headers` we pass must be ordered as the table's columns.
-
-Passing empty strings as headers will cause scavenger to ignore a column.
-
-In this case we pass an empty string between `teams` and `1` to skip an empty spacing column.
 
 The result is the following:
 
