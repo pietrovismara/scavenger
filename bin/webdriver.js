@@ -62,7 +62,7 @@ var waitForElement = function () {
 }();
 
 var getScreenshot = function () {
-    var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(width, evaluate) {
+    var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(width, driverFn) {
         var driver, dimensions;
         return _regenerator2.default.wrap(function _callee2$(_context2) {
             while (1) {
@@ -72,50 +72,45 @@ var getScreenshot = function () {
                         driver = nightmare.get();
                         _context2.prev = 2;
 
-                        if (!evaluate) {
-                            _context2.next = 6;
-                            break;
+                        if (driverFn) {
+                            evalDriverFn(driverFn, driver)();
                         }
 
                         _context2.next = 6;
-                        return driver.evaluate(evalFn(evaluate));
-
-                    case 6:
-                        _context2.next = 8;
                         return driver.evaluate(getPageDimensions);
 
-                    case 8:
+                    case 6:
                         dimensions = _context2.sent;
 
                         width = width ? Number(width) : dimensions.width;
-                        _context2.next = 12;
+                        _context2.next = 10;
                         return driver.viewport(width, dimensions.height).wait(1000);
+
+                    case 10:
+                        _context2.next = 12;
+                        return driver.evaluate(hideScrollbar);
 
                     case 12:
                         _context2.next = 14;
-                        return driver.evaluate(hideScrollbar);
-
-                    case 14:
-                        _context2.next = 16;
                         return driver.screenshot();
 
-                    case 16:
+                    case 14:
                         return _context2.abrupt('return', _context2.sent);
 
-                    case 19:
-                        _context2.prev = 19;
+                    case 17:
+                        _context2.prev = 17;
                         _context2.t0 = _context2['catch'](2);
 
                         end();
                         debug(_context2.t0);
                         return _context2.abrupt('return', _promise2.default.reject(_context2.t0));
 
-                    case 24:
+                    case 22:
                     case 'end':
                         return _context2.stop();
                 }
             }
-        }, _callee2, this, [[2, 19]]);
+        }, _callee2, this, [[2, 17]]);
     }));
 
     return function getScreenshot(_x2, _x3) {
@@ -124,7 +119,7 @@ var getScreenshot = function () {
 }();
 
 var getHTML = function () {
-    var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(evaluate) {
+    var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(driverFn) {
         var driver;
         return _regenerator2.default.wrap(function _callee3$(_context3) {
             while (1) {
@@ -134,39 +129,33 @@ var getHTML = function () {
                         driver = nightmare.get();
                         _context3.prev = 2;
 
-                        if (!evaluate) {
-                            _context3.next = 6;
-                            break;
+                        if (driverFn) {
+                            evalDriverFn(driverFn, driver)();
                         }
-
                         _context3.next = 6;
-                        return driver.evaluate(evalFn(evaluate));
-
-                    case 6:
-                        _context3.next = 8;
                         return driver.evaluate(function () {
                             var node = document.doctype;
                             var doctype = "<!DOCTYPE " + node.name + (node.publicId ? ' PUBLIC "' + node.publicId + '"' : '') + (!node.publicId && node.systemId ? ' SYSTEM' : '') + (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
                             return doctype + '\n' + document.documentElement.innerHTML;
                         });
 
-                    case 8:
+                    case 6:
                         return _context3.abrupt('return', _context3.sent);
 
-                    case 11:
-                        _context3.prev = 11;
+                    case 9:
+                        _context3.prev = 9;
                         _context3.t0 = _context3['catch'](2);
 
                         end();
                         debug(_context3.t0);
                         return _context3.abrupt('return', _promise2.default.reject(_context3.t0));
 
-                    case 16:
+                    case 14:
                     case 'end':
                         return _context3.stop();
                 }
             }
-        }, _callee3, this, [[2, 11]]);
+        }, _callee3, this, [[2, 9]]);
     }));
 
     return function getHTML(_x4) {
@@ -245,4 +234,28 @@ function getPageDimensions() {
 
 function evalFn(fnString) {
     return eval('(' + fnString + ')');
+}
+
+function evalDriverFn(fn, driver) {
+    debug('evalDriverFn');
+    if (typeof fn === 'string') {
+        fn = evalFn(fn);
+    }
+    return fn.bind(driver);
+
+    // TODO find a way to extract a subset of driver methods like the following:
+    // return fn.bind({
+    //     wait: driver.wait,
+    //     insert: driver.insert,
+    //     type: driver.type,
+    //     click: driver.click,
+    //     select: driver.select,
+    //     check: driver.check,
+    //     uncheck: driver.uncheck,
+    //     mousedown: driver.mousedown,
+    //     mouseup: driver.mouseup,
+    //     mouseover: driver.mouseover,
+    //     evaluate: driver.evaluate,
+    //     _queue: driver._queue
+    // });
 }

@@ -25,8 +25,8 @@ var exec = function () {
                         _context.prev = 2;
 
                         // If string is a path to js file, load it
-                        if (argv.evaluate && path.parse(argv.evaluate).ext === '.js') {
-                            argv.evaluate = fs.readFileSync(argv.evaluate).toString('utf-8');
+                        if (argv.driverFn && path.parse(argv.driverFn).ext === '.js') {
+                            argv.driverFn = fs.readFileSync(argv.driverFn).toString('utf-8');
                         }
 
                         _context.t0 = argv._[0];
@@ -34,7 +34,7 @@ var exec = function () {
                         break;
 
                     case 7:
-                        args = _.pick(argv, ['name', 'minify', 'selector', 'evaluate']);
+                        args = _.pick(argv, ['name', 'minify', 'selector', 'driverFn']);
                         debug('scrape', args);
                         _context.next = 11;
                         return scavenger.scrape(argv.url, args);
@@ -61,7 +61,7 @@ var exec = function () {
                         return _context.abrupt('break', 42);
 
                     case 19:
-                        args = _.pick(argv, ['name', 'width', 'crop', 'format', 'selector', 'evaluate']);
+                        args = _.pick(argv, ['name', 'width', 'crop', 'format', 'selector', 'driverFn']);
                         debug('screenshot', args);
                         _context.next = 23;
                         return scavenger.screenshot(argv.url, args);
@@ -90,7 +90,7 @@ var exec = function () {
                         return _context.abrupt('break', 42);
 
                     case 32:
-                        args = _.pick(argv, ['minify', 'name', 'width', 'crop', 'format', 'selector', 'evaluate']);
+                        args = _.pick(argv, ['minify', 'name', 'width', 'crop', 'format', 'selector', 'driverFn']);
                         debug('ss', args);
                         _context.next = 36;
                         return scavenger.ss(argv.url, args);
@@ -177,16 +177,16 @@ var commandOptions = {
         describe: 'Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.',
         alias: 'width'
     },
-    e: {
-        describe: 'A Javascript function to evaluate in the page context. Can be a path to a file or a string.',
-        alias: 'evaluate'
+    d: {
+        describe: 'A Javascript function which is executed with the driver context. Can be a path to a file or a string.',
+        alias: 'driverFn'
     }
 };
 
 if (module.parent) {
     module.exports = scavenger;
 } else {
-    var argv = require('yargs').usage('Usage: scavenger <command> [options]').example('scavenger screenshot -u https://www.google.it -n test.jpg -c 1200X680 980X560').demand(['scrape', 'screenshot', 'ss']).command('scrape', 'Scrape HTML from the passed url', _.pick(commandOptions, ['u', 'm', 's', 'e', 'ep'])).command('screenshot', 'Take a screenshot of the passed url', _.omit(commandOptions, ['m'])).command('ss', 'Scrape and Screenshot', commandOptions).help().argv;
+    var argv = require('yargs').usage('Usage: scavenger <command> [options]').example('scavenger screenshot -u https://www.google.it -n test.jpg -c 1200X680 980X560').demand(['scrape', 'screenshot', 'ss']).command('scrape', 'Scrape HTML from the passed url', _.pick(commandOptions, ['u', 'm', 's', 'd'])).command('screenshot', 'Take a screenshot of the passed url', _.omit(commandOptions, ['m'])).command('ss', 'Scrape and Screenshot', commandOptions).help().argv;
 
     exec(argv);
 }

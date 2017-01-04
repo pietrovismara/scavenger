@@ -39,7 +39,7 @@ var ss = function () {
                                                 task = parser.parseOptions(task);
                                                 opt = task.options || options;
                                                 _context.next = 4;
-                                                return webdriver.goto(task.url);
+                                                return webdriver.goto(task.url, opt.waitMs);
 
                                             case 4:
                                                 _context.next = 6;
@@ -122,7 +122,7 @@ var screenshot = function () {
                                                 task = parser.parseOptions(task);
                                                 opt = task.options || options;
                                                 _context3.next = 4;
-                                                return webdriver.goto(task.url);
+                                                return webdriver.goto(task.url, opt.waitMs);
 
                                             case 4:
                                                 _context3.next = 6;
@@ -197,7 +197,7 @@ var scrape = function () {
                                                 task = parser.parseOptions(task);
                                                 opt = task.options || options;
                                                 _context5.next = 4;
-                                                return webdriver.goto(task.url);
+                                                return webdriver.goto(task.url, opt.waitMs);
 
                                             case 4:
                                                 _context5.next = 6;
@@ -243,13 +243,13 @@ var scrape = function () {
 
 var scrapeOnce = function () {
     var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(options) {
-        var _parser$parseOptions, url, minify, evaluate, html, autoEnd;
+        var _parser$parseOptions, url, minify, driverFn, html, autoEnd;
 
         return _regenerator2.default.wrap(function _callee7$(_context7) {
             while (1) {
                 switch (_context7.prev = _context7.next) {
                     case 0:
-                        _parser$parseOptions = parser.parseOptions(options), url = _parser$parseOptions.url, minify = _parser$parseOptions.minify, evaluate = _parser$parseOptions.evaluate;
+                        _parser$parseOptions = parser.parseOptions(options), url = _parser$parseOptions.url, minify = _parser$parseOptions.minify, driverFn = _parser$parseOptions.driverFn;
                         html = void 0, autoEnd = void 0;
                         _context7.prev = 2;
                         _context7.next = 5;
@@ -268,7 +268,7 @@ var scrapeOnce = function () {
 
                     case 10:
                         _context7.next = 12;
-                        return webdriver.getHTML(evaluate);
+                        return webdriver.getHTML(driverFn);
 
                     case 12:
                         html = _context7.sent;
@@ -324,13 +324,13 @@ var scrapeOnce = function () {
 
 var screenshotOnce = function () {
     var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(options) {
-        var _parser$parseOptions2, url, width, crop, format, evaluate, buffer, autoEnd;
+        var _parser$parseOptions2, url, width, crop, format, driverFn, buffer, autoEnd;
 
         return _regenerator2.default.wrap(function _callee8$(_context8) {
             while (1) {
                 switch (_context8.prev = _context8.next) {
                     case 0:
-                        _parser$parseOptions2 = parser.parseOptions(options), url = _parser$parseOptions2.url, width = _parser$parseOptions2.width, crop = _parser$parseOptions2.crop, format = _parser$parseOptions2.format, evaluate = _parser$parseOptions2.evaluate;
+                        _parser$parseOptions2 = parser.parseOptions(options), url = _parser$parseOptions2.url, width = _parser$parseOptions2.width, crop = _parser$parseOptions2.crop, format = _parser$parseOptions2.format, driverFn = _parser$parseOptions2.driverFn;
                         buffer = void 0, autoEnd = void 0;
                         _context8.prev = 2;
                         _context8.next = 5;
@@ -349,7 +349,7 @@ var screenshotOnce = function () {
 
                     case 10:
                         _context8.next = 12;
-                        return webdriver.getScreenshot(width, evaluate);
+                        return webdriver.getScreenshot(width, driverFn);
 
                     case 12:
                         buffer = _context8.sent;
@@ -447,10 +447,6 @@ function createMapFn(options, fn) {
 }
 
 function extract(html, opts) {
-    if (opts.table) {
-        return extr.table(html, opts);
-    }
-
     opts = parser.parseExtractOptions(opts);
     _.forEach(opts.fields, function (field, key) {
         opts.fields[key] = parser.parseField(field);
