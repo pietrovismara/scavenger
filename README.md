@@ -195,6 +195,33 @@ return scavenger.scrape('http://www.economist.com', extract);
 
 -------------------------
 
+**.paginateUrl(options, fn)**
+
+Helper method. Returns an array of urls with the correct query for pagination.
+
+```javascript
+const urls = scavenger.paginateUrl({
+    baseUrl: 'https://www.google.com/search?',
+    params: {
+        q: 'scavenger scraper',
+        start: 0
+    },
+    paginationParam: 'start',
+    limit: 30,
+    step: 10
+});
+
+// [
+//     'https://www.google.com/search?q=scavenger%20scraper&start=0',    
+//     'https://www.google.com/search?q=scavenger%20scraper&start=10'
+// ]
+
+scavenger.scrape(urls);
+```
+
+-------------------------
+
+
 
 # Command line usage
 
