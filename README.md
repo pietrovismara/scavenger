@@ -55,7 +55,7 @@ scavenger.scrape(url)
 scavenger.scrape(url, {    
     selector: '#id', // ID of a DOMElement to wait before scraping
     minify: false, // If true, minify the html
-    evaluate: function(){} // A function string to evaluate in the scraped page context
+    driverFn: function(){} // A function that is evaluated in Nightmarejs context to interact with the page
 })
 .then((html) => {});
 
@@ -112,7 +112,7 @@ Combines `.scrape` and `.screenshot`. If `mapFn` is passed, it will be executed 
 scavenger.screenshot(url, {    
     selector: '#id',
     minify: false,
-    evaluate: function(){},
+    driverFn: function(){},
     format: 'png',
     crop: [{
         width: 1280,
