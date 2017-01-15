@@ -37,18 +37,20 @@ function parseArgs(args) {
 }
 
 function parseOptions(options) {
+    var defaultOpts = {
+        useragent: 'Scavenger - https://www.npmjs.com/package/scavenger'
+    };
+
     if (!options) {
-        return {};
+        return _.assign({}, defaultOpts);
     }
 
     if (_.isString(options)) {
-        return {
-            url: options
-        };
+        return _.assign({ url: options }, defaultOpts);
     }
 
     if (_.isPlainObject(options)) {
-        return options;
+        return _.assign({}, defaultOpts, options);
     }
 }
 
@@ -80,7 +82,7 @@ function parseCrop(crop) {
 }
 
 function parseExtractOptions(options) {
-    if (!options.container && !options.fields) {
+    if (!options.scope && !options.fields) {
         return {
             fields: options
         };

@@ -174,12 +174,18 @@ module.exports = {
     waitForElement: waitForElement,
     getScreenshot: getScreenshot,
     getHTML: getHTML,
+    setUserAgent: setUserAgent,
     isLoaded: isLoaded,
     goto: goto
 };
 
 function load(url, waitMs, debugMode) {
     nightmare.init(debugMode);
+}
+
+function setUserAgent(useragent) {
+    debug('setting useragent: ' + useragent);
+    return nightmare.get().useragent(useragent);
 }
 
 function goto(url, waitMs) {
@@ -243,7 +249,8 @@ function evalDriverFn(fn, driver) {
     }
     return fn.bind(driver);
 
-    // TODO find a way to extract a subset of driver methods like the following:
+    // TODO find a way to extract a subset of driver methods like the following
+    // without breaking nightmare context:
     // return fn.bind({
     //     wait: driver.wait,
     //     insert: driver.insert,

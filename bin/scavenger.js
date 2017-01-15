@@ -122,17 +122,21 @@ var screenshot = function () {
                                                 task = parser.parseOptions(task);
                                                 opt = task.options || options;
                                                 _context3.next = 4;
-                                                return webdriver.goto(task.url, opt.waitMs);
+                                                return webdriver.setUserAgent(opt.useragent);
 
                                             case 4:
                                                 _context3.next = 6;
-                                                return screenshotOnce(opt);
+                                                return webdriver.goto(task.url, opt.waitMs);
 
                                             case 6:
+                                                _context3.next = 8;
+                                                return screenshotOnce(opt);
+
+                                            case 8:
                                                 buffers = _context3.sent;
                                                 return _context3.abrupt('return', mapFunc(buffers));
 
-                                            case 8:
+                                            case 10:
                                             case 'end':
                                                 return _context3.stop();
                                         }
@@ -197,17 +201,21 @@ var scrape = function () {
                                                 task = parser.parseOptions(task);
                                                 opt = task.options || options;
                                                 _context5.next = 4;
-                                                return webdriver.goto(task.url, opt.waitMs);
+                                                return webdriver.setUserAgent(opt.useragent);
 
                                             case 4:
                                                 _context5.next = 6;
-                                                return scrapeOnce(opt);
+                                                return webdriver.goto(task.url, opt.waitMs);
 
                                             case 6:
+                                                _context5.next = 8;
+                                                return scrapeOnce(opt);
+
+                                            case 8:
                                                 html = _context5.sent;
                                                 return _context5.abrupt('return', mapFunc(html));
 
-                                            case 8:
+                                            case 10:
                                             case 'end':
                                                 return _context5.stop();
                                         }
