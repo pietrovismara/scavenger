@@ -199,13 +199,13 @@ var scrape = function () {
                                         switch (_context5.prev = _context5.next) {
                                             case 0:
                                                 task = parser.parseOptions(task);
-                                                opt = task.options || options;
+                                                opt = task || options;
                                                 _context5.next = 4;
                                                 return webdriver.setUserAgent(opt.useragent);
 
                                             case 4:
                                                 _context5.next = 6;
-                                                return webdriver.goto(task.url, opt.waitMs);
+                                                return webdriver.goto(opt.url, opt.waitMs);
 
                                             case 6:
                                                 _context5.next = 8;

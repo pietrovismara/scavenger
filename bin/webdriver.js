@@ -135,6 +135,9 @@ var getHTML = function () {
                         _context3.next = 6;
                         return driver.evaluate(function () {
                             var node = document.doctype;
+                            if (!node) {
+                                return document.documentElement.innerHTML;
+                            }
                             var doctype = "<!DOCTYPE " + node.name + (node.publicId ? ' PUBLIC "' + node.publicId + '"' : '') + (!node.publicId && node.systemId ? ' SYSTEM' : '') + (node.systemId ? ' "' + node.systemId + '"' : '') + '>';
                             return doctype + '\n' + document.documentElement.innerHTML;
                         });
@@ -179,7 +182,7 @@ module.exports = {
     goto: goto
 };
 
-function load(url, waitMs, debugMode) {
+function load(url, debugMode) {
     nightmare.init(debugMode);
 }
 
@@ -190,7 +193,8 @@ function setUserAgent(useragent) {
 
 function goto(url, waitMs) {
     debug('goto: ' + url);
-    return nightmare.get().goto(url).wait(waitMs).catch(function (err) {
+    var driver = nightmare.get();
+    return driver.goto(url).wait(waitMs).catch(function (err) {
         debug(err);
         end();
         if (!(err instanceof Error) && err.details) {
