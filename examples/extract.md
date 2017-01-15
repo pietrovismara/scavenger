@@ -153,7 +153,7 @@ Passing the option `groupBy: 'author'` to `.createExtractor`:
 
 ```
 
-** Table **
+**Table**
 
 Readapted (simplified for example) from [source](http://sports.williamhill.it/bet_ita/it/betting/t/321/Serie+A.html)
 

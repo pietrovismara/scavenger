@@ -55,7 +55,8 @@ scavenger.scrape(url)
 scavenger.scrape(url, {    
     selector: '#id', // ID of a DOMElement to wait before scraping
     minify: false, // If true, minify the html
-    driverFn: function(){} // A function that is evaluated in Nightmarejs context to interact with the page
+    driverFn: function(){}, // A function that is evaluated in Nightmarejs context to interact with the page,
+    useragent: 'Scavenger - https://www.npmjs.com/package/scavenger' // By default
 })
 .then((html) => {});
 
@@ -92,7 +93,8 @@ scavenger.screenshot(url, {
         width: 1280,
         height: 680
     }, ...],
-    width: 1280 // Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.
+    width: 1280, // Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.
+    useragent: 'Scavenger - https://www.npmjs.com/package/scavenger' // By default
 })
 .then((buffers) => {
     console.log(buffers);
@@ -149,7 +151,7 @@ const authors = scavenger.extract(html, {
         author: 'h3.author', // Any css selector
         url: {
             selector: 'a.link',
-            attribute: 'href' // Gets the href attribute value for the element found with selector
+            attribute: 'href' // Gets the href attribute value for the element found at selector
         },
         any: '',
         ...
