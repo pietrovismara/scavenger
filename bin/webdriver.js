@@ -188,6 +188,7 @@ function load(url, debugMode) {
 
 function setUserAgent(useragent) {
     debug('setting useragent: ' + useragent);
+    useragent = useragent || 'Scavenger - https://www.npmjs.com/package/scavenger';
     return nightmare.get().useragent(useragent);
 }
 
