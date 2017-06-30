@@ -19,16 +19,18 @@ var waitForElement = function () {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
+                        debug('waitForElement: ' + selector);
+
                         if (selector) {
-                            _context.next = 2;
+                            _context.next = 3;
                             break;
                         }
 
                         return _context.abrupt('return', false);
 
-                    case 2:
-                        _context.prev = 2;
-                        _context.next = 5;
+                    case 3:
+                        _context.prev = 3;
+                        _context.next = 6;
                         return nightmare.get().evaluate(function (_selector, done) {
                             var interval = setInterval(function () {
                                 var element = document.querySelector(_selector);
@@ -45,25 +47,25 @@ var waitForElement = function () {
                             }, 50);
                         }, selector);
 
-                    case 5:
+                    case 6:
                         test = _context.sent;
-                        _context.next = 13;
+                        _context.next = 14;
                         break;
 
-                    case 8:
-                        _context.prev = 8;
-                        _context.t0 = _context['catch'](2);
+                    case 9:
+                        _context.prev = 9;
+                        _context.t0 = _context['catch'](3);
 
                         end();
                         debug(_context.t0);
                         return _context.abrupt('return', false);
 
-                    case 13:
+                    case 14:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[2, 8]]);
+        }, _callee, this, [[3, 9]]);
     }));
 
     return function waitForElement(_x) {
