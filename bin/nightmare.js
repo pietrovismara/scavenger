@@ -97,7 +97,10 @@ module.exports = {
 function init(debugMode) {
     nightmare = nightmare || new Nightmare({
         show: false,
-        frame: false
+        frame: false,
+        switches: {
+            'ignore-certificate-errors': true
+        }
     });
 
     if (debugMode) {

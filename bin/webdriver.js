@@ -14,12 +14,21 @@ var _promise2 = _interopRequireDefault(_promise);
 
 var waitForElement = function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(selector) {
+        var test;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-                        _context.prev = 0;
-                        _context.next = 3;
+                        if (selector) {
+                            _context.next = 2;
+                            break;
+                        }
+
+                        return _context.abrupt('return', false);
+
+                    case 2:
+                        _context.prev = 2;
+                        _context.next = 5;
                         return nightmare.get().evaluate(function (_selector, done) {
                             var interval = setInterval(function () {
                                 var element = document.querySelector(_selector);
@@ -27,33 +36,34 @@ var waitForElement = function () {
                                     return;
                                 }
 
-                                if (element.childElementCount > 0) {
+                                if (element.innerHTML.length) {
                                     clearInterval(interval);
                                     setTimeout(function () {
-                                        done();
+                                        done(null, element.innerHTML);
                                     });
                                 }
                             }, 50);
                         }, selector);
 
-                    case 3:
-                        _context.next = 10;
+                    case 5:
+                        test = _context.sent;
+                        _context.next = 13;
                         break;
 
-                    case 5:
-                        _context.prev = 5;
-                        _context.t0 = _context['catch'](0);
+                    case 8:
+                        _context.prev = 8;
+                        _context.t0 = _context['catch'](2);
 
                         end();
                         debug(_context.t0);
                         return _context.abrupt('return', false);
 
-                    case 10:
+                    case 13:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[0, 5]]);
+        }, _callee, this, [[2, 8]]);
     }));
 
     return function waitForElement(_x) {
