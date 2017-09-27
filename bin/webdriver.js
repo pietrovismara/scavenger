@@ -14,7 +14,6 @@ var _promise2 = _interopRequireDefault(_promise);
 
 var waitForElement = function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(selector) {
-        var test;
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -41,31 +40,30 @@ var waitForElement = function () {
                                 if (element.innerHTML.length) {
                                     clearInterval(interval);
                                     setTimeout(function () {
-                                        done(null, element.innerHTML);
+                                        done();
                                     });
                                 }
                             }, 50);
                         }, selector);
 
                     case 6:
-                        test = _context.sent;
-                        _context.next = 14;
+                        _context.next = 13;
                         break;
 
-                    case 9:
-                        _context.prev = 9;
+                    case 8:
+                        _context.prev = 8;
                         _context.t0 = _context['catch'](3);
 
                         end();
                         debug(_context.t0);
                         return _context.abrupt('return', false);
 
-                    case 14:
+                    case 13:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[3, 9]]);
+        }, _callee, this, [[3, 8]]);
     }));
 
     return function waitForElement(_x) {
@@ -194,8 +192,8 @@ module.exports = {
     goto: goto
 };
 
-function load(url, debugMode) {
-    nightmare.init(debugMode);
+function load(nightmareOptions) {
+    nightmare.init(nightmareOptions);
 }
 
 function setUserAgent(useragent) {

@@ -27,7 +27,7 @@ var ss = function () {
                         _parser$parseArgs = parser.parseArgs(_args2), tasks = _parser$parseArgs.tasks, options = _parser$parseArgs.options, mapFunc = _parser$parseArgs.mapFunc;
 
 
-                        webdriver.load();
+                        webdriver.load(options.nightmareOptions);
                         _context2.next = 5;
                         return Promise.mapSeries(tasks, function () {
                             var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(task) {
@@ -114,7 +114,7 @@ var screenshot = function () {
                         _parser$parseArgs2 = parser.parseArgs(_args4), tasks = _parser$parseArgs2.tasks, options = _parser$parseArgs2.options, mapFunc = _parser$parseArgs2.mapFunc;
 
 
-                        webdriver.load();
+                        webdriver.load(options.nightmareOptions);
                         _context4.next = 5;
                         return Promise.mapSeries(tasks, function () {
                             var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(task) {
@@ -197,7 +197,7 @@ var scrape = function () {
                         _parser$parseArgs3 = parser.parseArgs(_args6), tasks = _parser$parseArgs3.tasks, options = _parser$parseArgs3.options, mapFunc = _parser$parseArgs3.mapFunc;
 
 
-                        webdriver.load();
+                        webdriver.load(options.nightmareOptions);
                         _context6.next = 5;
                         return Promise.mapSeries(tasks, function () {
                             var _ref6 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(task) {
@@ -263,13 +263,13 @@ var scrape = function () {
 
 var scrapeOnce = function () {
     var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(options) {
-        var _parser$parseOptions, url, minify, driverFn, html, autoEnd;
+        var _parser$parseOptions, url, minify, driverFn, nightmareOptions, html, autoEnd;
 
         return _regenerator2.default.wrap(function _callee7$(_context7) {
             while (1) {
                 switch (_context7.prev = _context7.next) {
                     case 0:
-                        _parser$parseOptions = parser.parseOptions(options), url = _parser$parseOptions.url, minify = _parser$parseOptions.minify, driverFn = _parser$parseOptions.driverFn;
+                        _parser$parseOptions = parser.parseOptions(options), url = _parser$parseOptions.url, minify = _parser$parseOptions.minify, driverFn = _parser$parseOptions.driverFn, nightmareOptions = _parser$parseOptions.nightmareOptions;
                         html = void 0, autoEnd = void 0;
                         _context7.prev = 2;
                         _context7.next = 5;
@@ -282,7 +282,7 @@ var scrapeOnce = function () {
                         }
 
                         autoEnd = true;
-                        webdriver.load();
+                        webdriver.load(nightmareOptions);
                         _context7.next = 10;
                         return webdriver.goto(url);
 
@@ -344,13 +344,13 @@ var scrapeOnce = function () {
 
 var screenshotOnce = function () {
     var _ref8 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(options) {
-        var _parser$parseOptions2, url, width, crop, format, driverFn, buffer, autoEnd;
+        var _parser$parseOptions2, url, width, crop, format, driverFn, nightmareOptions, buffer, autoEnd;
 
         return _regenerator2.default.wrap(function _callee8$(_context8) {
             while (1) {
                 switch (_context8.prev = _context8.next) {
                     case 0:
-                        _parser$parseOptions2 = parser.parseOptions(options), url = _parser$parseOptions2.url, width = _parser$parseOptions2.width, crop = _parser$parseOptions2.crop, format = _parser$parseOptions2.format, driverFn = _parser$parseOptions2.driverFn;
+                        _parser$parseOptions2 = parser.parseOptions(options), url = _parser$parseOptions2.url, width = _parser$parseOptions2.width, crop = _parser$parseOptions2.crop, format = _parser$parseOptions2.format, driverFn = _parser$parseOptions2.driverFn, nightmareOptions = _parser$parseOptions2.nightmareOptions;
                         buffer = void 0, autoEnd = void 0;
                         _context8.prev = 2;
                         _context8.next = 5;
@@ -363,7 +363,7 @@ var screenshotOnce = function () {
                         }
 
                         autoEnd = true;
-                        webdriver.load();
+                        webdriver.load(nightmareOptions);
                         _context8.next = 10;
                         return webdriver.goto(url);
 

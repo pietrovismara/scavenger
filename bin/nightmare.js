@@ -82,8 +82,17 @@ var isLoaded = function () {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var _ = require('lodash');
 var debug = require('debug')('scavenger:nightmare');
 var Nightmare = require('nightmare');
+
+var defaultOptions = {
+    show: false,
+    frame: false,
+    switches: {
+        'ignore-certificate-errors': true
+    }
+};
 
 var nightmare = void 0;
 
@@ -94,23 +103,11 @@ module.exports = {
     isLoaded: isLoaded
 };
 
-function init(debugMode) {
-    nightmare = nightmare || new Nightmare({
-        show: false,
-        frame: false,
-        switches: {
-            'ignore-certificate-errors': true
-        }
-    });
+function init(options) {
+    options = options || {};
+    options = _.assign({}, options, defaultOptions);
 
-    if (debugMode) {
-        nightmare.on('page', function (type, message, stack) {
-            debug(type, message, stack);
-        }).on('console', function (type, arg1, arg2) {
-            debug(type, arg1, arg2);
-        });
-    }
-
+    nightmare = nightmare || new Nightmare(options);
     return nightmare;
 }
 
