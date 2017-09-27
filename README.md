@@ -56,7 +56,8 @@ scavenger.scrape(url, {
     selector: '#id', // ID of a DOMElement to wait before scraping
     minify: false, // If true, minify the html
     driverFn: function(){}, // A function that is evaluated in Nightmarejs context to interact with the page,
-    useragent: 'Scavenger - https://www.npmjs.com/package/scavenger' // By default
+    useragent: 'Scavenger - https://www.npmjs.com/package/scavenger', // By default,
+    nightmareOptions: {} // This options go directly to the Nightmarejs constructor
 })
 .then((html) => {});
 
@@ -94,7 +95,8 @@ scavenger.screenshot(url, {
         height: 680
     }, ...],
     width: 1280, // Viewport width in pixels. By default it adapts to the page width. Height is always 100% of the page.
-    useragent: 'Scavenger - https://www.npmjs.com/package/scavenger' // By default
+    useragent: 'Scavenger - https://www.npmjs.com/package/scavenger', // By default
+    nightmareOptions: {} // This options go directly to the Nightmarejs constructor
 })
 .then((buffers) => {
     console.log(buffers);
@@ -111,10 +113,11 @@ scavenger.screenshot(url, {
 Combines `.scrape` and `.screenshot`. If `mapFn` is passed, it will be executed on html only.
 
 ```javascript
-scavenger.screenshot(url, {    
+scavenger.ss(url, {    
     selector: '#id',
     minify: false,
     driverFn: function(){},
+    nightmareOptions: {},
     format: 'png',
     crop: [{
         width: 1280,
